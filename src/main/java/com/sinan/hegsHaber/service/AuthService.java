@@ -21,21 +21,21 @@ public class AuthService {
 
     // Kullanicı kaydi
     public User register(String username, String password) {
-        if (userRepository.existsByUsername(username)) {
-            throw new RuntimeException("Kullanıcı adı zaten alınmış!");
+        if (userRepository.existsByUsername(username)) {// Kullanıcı adı zaten var mı kontrol et
+            throw new RuntimeException("Kullanıcı adı zaten alınmış!");// hata fırlat
         }
-        User user = new User();
+        User user = new User();// Yeni kullanıcı oluştur
         user.setUsername(username);
         // Şifreyi BCrypt ile hash'le
-        user.setPassword(passwordEncoder.encode(password));
-        return userRepository.save(user);
+        user.setPassword(passwordEncoder.encode(password));// yani şifreyi hashle
+        return userRepository.save(user);// veritabanına kaydet
     }
 
     // Kullanicı girisi
     public boolean login(String username, String password) {
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Kullanıcı bulunamadı"));
+                .orElseThrow(() -> new RuntimeException("Kullanıcı bulunamadı"));// Kullanıcıyı bulamazsa hata fırlat
         // Girilen şifreyi BCrypt ile karşılaştır
-        return passwordEncoder.matches(password, user.getPassword());
+        return passwordEncoder.matches(password, user.getPassword());// girilen şifre ile hashlenmiş şifreyi karşılaştır
     }
 }

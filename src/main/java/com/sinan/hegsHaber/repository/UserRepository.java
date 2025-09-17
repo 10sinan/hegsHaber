@@ -10,7 +10,7 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     // Kullanicı adi ile kullaniciyi bulma
-    Optional<User> findByUsername(String username);
+    Optional<User> findByUsername(String username);// Kullanıcı adı ile kullanıcıyı bul sprşng oto anlıyor
 
     // Kullanicı adinin var olup olmadigini kontrol etme
     boolean existsByUsername(String username);

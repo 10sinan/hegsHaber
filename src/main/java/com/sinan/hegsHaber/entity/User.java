@@ -32,5 +32,5 @@ public class User {
     private String password;
 
     @Column(nullable = false)
-    private String role = "USER";
+    private String role = "USER";// Varsayılan rol "USER"
 }

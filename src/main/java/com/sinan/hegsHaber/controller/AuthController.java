@@ -10,6 +10,8 @@ import com.sinan.hegsHaber.dto.DTOLoginRequest;
 import com.sinan.hegsHaber.dto.DTORegisterRequest;
 import com.sinan.hegsHaber.entity.User;
 import com.sinan.hegsHaber.service.AuthService;
+import com.sinan.hegsHaber.util.JwtUtil;
+import com.sinan.hegsHaber.dto.AuthResponse;
 
 @RestController
 @Data
@@ -21,6 +23,9 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
+    @Autowired
+    private JwtUtil jwtUtil;// JWT olusturma ve dogrulama islemleri
+
     // Kullanicı kayit endpoint'i
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody DTORegisterRequest request) {
@@ -30,12 +35,13 @@ public class AuthController {
 
     // Kullanicı giris endpoint'i
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody DTOLoginRequest request) { // response entity demek http response dondur
-                                                                           // demek
-        boolean success = authService.login(request.getUsername(), request.getPassword());// Giris yapmayi dene
-        if (success) {// Giris basariliysa
-            return ResponseEntity.ok("Giris basarili!");// Basarili yanit dondur
+    public ResponseEntity<?> login(@RequestBody DTOLoginRequest request) {
+        boolean success = authService.login(request.getUsername(), request.getPassword());
+        if (success) {
+            String token = jwtUtil.tokenUret(request.getUsername());
+            AuthResponse response = new AuthResponse("Giris basarili!", token);
+            return ResponseEntity.ok(response);
         }
-        return ResponseEntity.status(401).body("Geçersiz kullanıcı adı veya şifre!");// Geçersiz giriş yanıtı döndür
+        return ResponseEntity.status(401).body("Geçersiz kullanıcı adı veya şifre!");
     }
 }
