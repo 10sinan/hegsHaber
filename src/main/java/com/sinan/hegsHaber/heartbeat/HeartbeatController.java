@@ -1,4 +1,4 @@
-package com.sinan.hegsHaber.heartbreak;
+package com.sinan.hegsHaber.heartbeat;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +11,6 @@ public class HeartbeatController {
 
     @GetMapping("/heartbeat")
     public ResponseEntity<String> heartbeat() {
-        return ResponseEntity.ok("alive");
+        return ResponseEntity.ok("calisiyor");
     }
 }
