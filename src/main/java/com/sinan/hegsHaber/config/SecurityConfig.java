@@ -20,8 +20,10 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/register", "/auth/login").permitAll()// Kayit ve giris islemleri herkese
-                                                                                     // acik
+                        .requestMatchers("/auth/register", "/auth/login", "/api/heartbeat").permitAll()// Kayit ve giris
+                                                                                                       // islemleri
+                                                                                                       // herkese
+                        // acik
                         .anyRequest().authenticated());
         return http.build();// Guvenlik zincirini olustur( build yani tamamla)
     }
