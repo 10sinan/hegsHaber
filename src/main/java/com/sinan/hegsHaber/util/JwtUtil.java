@@ -8,6 +8,8 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
+import com.sinan.hegsHaber.entity.User;
+
 import javax.crypto.SecretKey;
 import java.util.Date;
 
@@ -25,9 +27,10 @@ public class JwtUtil {
 
     private final long EXPIRATION = 1000 * 60 * 60; // 1 saat jwt suresi
 
-    public String tokenUret(String username) {// JWT olustur
+    public String tokenUret(User user) {// JWT olustur
         return Jwts.builder()// JWT olusturucu
-                .subject(username)// Kullanici adini =konu olarak ayarla
+                .subject(user.getUsername())// Kullanici adini =konu olarak ayarla
+                .claim("role", user.getRole())// Kullanici rolunu ekle
                 .issuedAt(new Date())// Olusturulma zamanini ayarla
                 .expiration(new Date(System.currentTimeMillis() + EXPIRATION))// Bitis zamanini ayarla
                 .signWith(key)// Secret key ile imzala

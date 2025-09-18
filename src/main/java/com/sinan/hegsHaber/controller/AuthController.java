@@ -6,7 +6,6 @@ import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.sinan.hegsHaber.dto.DTOLoginRequest;
 import com.sinan.hegsHaber.dto.DTORegisterRequest;
 import com.sinan.hegsHaber.entity.User;
 import com.sinan.hegsHaber.service.AuthService;
@@ -35,10 +34,10 @@ public class AuthController {
 
     // Kullanicı giris endpoint'i
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody DTOLoginRequest request) {
+    public ResponseEntity<?> login(@RequestBody User request) {
         boolean success = authService.login(request.getUsername(), request.getPassword());
         if (success) {
-            String token = jwtUtil.tokenUret(request.getUsername());
+            String token = jwtUtil.tokenUret(request);
             AuthResponse response = new AuthResponse("Giris basarili!", token);
             return ResponseEntity.ok(response);
         }

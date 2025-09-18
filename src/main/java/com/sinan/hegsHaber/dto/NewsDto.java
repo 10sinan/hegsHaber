@@ -1,0 +1,14 @@
+package com.sinan.hegsHaber.dto;
+
+import java.util.Date;
+import lombok.Data;
+
+@Data
+public class NewsDto {// haber dto su
+    private String baslik;
+    private String link;
+    private Date yayimlanmaTarihi;// yayimlanma tarihi
+    private String aciklama;
+    private String kaynak;// haber kaynagi
+
+}

@@ -26,6 +26,10 @@ public class AuthService {
         }
         User user = new User();// Yeni kullanıcı oluştur
         user.setUsername(username);
+        if (user.getUsername().equals("admin")) {
+            user.setRole("ADMIN");// Eğer kullanıcı adı "admin" ise rolü "ADMIN" yap
+        }
+
         // Şifreyi BCrypt ile hash'le
         user.setPassword(passwordEncoder.encode(password));// yani şifreyi hashle
         return userRepository.save(user);// veritabanına kaydet
