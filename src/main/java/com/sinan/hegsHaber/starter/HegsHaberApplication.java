@@ -12,6 +12,6 @@ public class HegsHaberApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(HegsHaberApplication.class, args);
-	}
+	}// mamın
 
 }
