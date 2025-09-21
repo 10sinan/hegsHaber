@@ -65,7 +65,8 @@ public class AuthService {
             System.out.println("Username: " + user.getUsername());
             System.out.println("Role: " + user.getRole());
             // Kullanıcı bilgilerini frontend'e dön
-            return new AuthResponse("Giriş başarılı! Token: " + token + ", Kullanıcı: " + user.getUsername() + ", Email: " + user.getEmail() + ", Rol: " + user.getRole(), token);
+            return new AuthResponse("Giriş başarılı! Token: " + token + ",\nKullanıcı: " + user.getUsername()
+                    + ",\nEmail: " + user.getEmail() + ",\nRol: " + user.getRole(), token);
         }
         return new AuthResponse("Geçersiz kullanıcı adı veya şifre!", null);
     }
