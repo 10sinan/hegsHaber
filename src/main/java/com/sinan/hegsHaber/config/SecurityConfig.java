@@ -25,7 +25,7 @@ public class SecurityConfig {
     SecurityFilterChain apiFiltrele(HttpSecurity http) throws Exception {// Güvenlik filtre zinciri ayarlari
         http
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.disable()) // CORS'u devre dışı bırak
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // devre dışı değil
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/auth/register", "/auth/login", "/api/heartbeat", "/news/**")
@@ -39,12 +39,10 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(List.of("https://hegs.com.tr", "https://*.hegs.com.tr")); // frontend
-                                                                                                         // adresi
-                                                                                                         // (https)
+        configuration.setAllowedOriginPatterns(List.of("*")); // 🔥 her yerden istek gelebilir
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
-        configuration.setAllowCredentials(true); // Cookie / Authorization header kullanılacaksa gerekli
+        configuration.setAllowCredentials(true);
         configuration.setExposedHeaders(List.of("Authorization", "Content-Type"));
         configuration.setMaxAge(3600L);
 
