@@ -13,7 +13,7 @@ public class WebConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {// Tüm yollar için CORS izinleri
                 registry.addMapping("/**")// Tüm yollar
-                        .allowedOrigins("hegs.com.tr") // Frontend adresi
+                        .allowedOrigins("https://hegs.com.tr") // Frontend adresi
                         .allowedMethods("GET", "POST", "PUT", "DELETE")
                         .allowedHeaders("*");
             }
