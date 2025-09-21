@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.sinan.hegsHaber.dto.DTORegisterRequest;
-import com.sinan.hegsHaber.entity.User;
+import com.sinan.hegsHaber.dto.DTOLoginRequest;
 import com.sinan.hegsHaber.service.AuthService;
 import com.sinan.hegsHaber.util.JwtUtil;
 import com.sinan.hegsHaber.dto.AuthResponse;
@@ -27,20 +27,15 @@ public class AuthController {
 
     // Kullanicı kayit endpoint'i
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody DTORegisterRequest request) {
-        User user = authService.register(request.getUsername(), request.getPassword());// Kullaniciyi kaydet
-        return ResponseEntity.ok("Kullanici olusturuldu: " + user.getUsername());// Basarili yanit dondur
+    public ResponseEntity<AuthResponse> register(@RequestBody DTORegisterRequest request) {// Kayit istegi al
+        AuthResponse response = authService.register(request);// Kayit islemini servise devret
+        return ResponseEntity.ok(response);// Kayit sonucunu don
     }
 
     // Kullanicı giris endpoint'i
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody User request) {
-        boolean success = authService.login(request.getUsername(), request.getPassword());
-        if (success) {
-            String token = jwtUtil.tokenUret(request);
-            AuthResponse response = new AuthResponse("Giris basarili!", token);
-            return ResponseEntity.ok(response);
-        }
-        return ResponseEntity.status(401).body("Geçersiz kullanıcı adı veya şifre!");
+    public ResponseEntity<AuthResponse> login(@RequestBody DTOLoginRequest request) {// Giris istegi al
+        AuthResponse response = authService.login(request);// Giris islemini servise devret
+        return ResponseEntity.ok(response);// Giris sonucunu don
     }
 }

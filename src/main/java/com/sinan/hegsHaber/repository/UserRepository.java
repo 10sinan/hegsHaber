@@ -14,4 +14,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     // Kullanicı adinin var olup olmadigini kontrol etme
     boolean existsByUsername(String username);
+
+    boolean existsByEmail(String email);
+
+    User findByEmail(String email);
 }

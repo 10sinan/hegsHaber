@@ -1,5 +1,7 @@
 package com.sinan.hegsHaber.entity;
 
+import java.security.Timestamp;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -33,4 +35,12 @@ public class User {
 
     @Column(nullable = false)
     private String role = "USER";// Varsayılan rol "USER"
+
+    @NotBlank
+    @Column(unique = true, nullable = false)
+    private String email;// kullanici email
+
+    @Column(updatable = false) // olusturma zamani degistirilemez
+    private Timestamp createdAt;// kullanici olusturma zamani
+
 }
