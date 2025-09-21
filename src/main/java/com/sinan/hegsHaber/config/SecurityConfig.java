@@ -25,8 +25,7 @@ public class SecurityConfig {
     SecurityFilterChain apiFiltrele(HttpSecurity http) throws Exception {// Güvenlik filtre zinciri ayarlari
         http
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> {
-                }) // CORS'u etkinleştir, aşağıdaki bean'den ayarları al
+                .cors(cors -> cors.disable()) // CORS'u devre dışı bırak
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/auth/register", "/auth/login", "/api/heartbeat", "/news/**")
