@@ -55,13 +55,18 @@ public class AuthService {
         if (!exists) {
             throw new RuntimeException("Kullanıcı bulunamadı");
         }
-        User user = userRepository.findByEmail(request.getEmail());// Kullanıcıyı e-posta ile bul
-        // Girilen şifreyi BCrypt ile karşılaştır
-        if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {// girilen şifre ile hashlenmiş şifreyi
-                                                                                 // karşılaştır
-            String token = jwtUtil.tokenUret(user);// JWT oluştur
-            return new AuthResponse("Giriş başarılı!", token);// Giris basarili
+        User user = userRepository.findByEmail(request.getEmail());
+        if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            String token = jwtUtil.tokenUret(user);
+            // Kullanıcı bilgilerini consola yazdır
+            System.out.println("Kullanıcı Bilgileri: ");
+            System.out.println("ID: " + user.getId());
+            System.out.println("Email: " + user.getEmail());
+            System.out.println("Username: " + user.getUsername());
+            System.out.println("Role: " + user.getRole());
+            // Kullanıcı bilgilerini frontend'e dön
+            return new AuthResponse("Giriş başarılı! Token: " + token + ", Kullanıcı: " + user.getUsername() + ", Email: " + user.getEmail() + ", Rol: " + user.getRole(), token);
         }
-        return new AuthResponse("Geçersiz kullanıcı adı veya şifre!", null);// Giris basarisiz
+        return new AuthResponse("Geçersiz kullanıcı adı veya şifre!", null);
     }
 }
