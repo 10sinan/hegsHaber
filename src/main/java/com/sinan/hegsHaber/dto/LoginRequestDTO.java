@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class DTOLoginRequest {
+public class LoginRequestDTO {
     @NotBlank // Kullanicı adi bos olamaz
     private String username;
 
