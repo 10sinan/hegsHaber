@@ -7,11 +7,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.http.HttpMethod;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.util.List;
 
 @Configuration // Güvenlik ayarları config
 public class SecurityConfig {
@@ -25,7 +20,6 @@ public class SecurityConfig {
     SecurityFilterChain apiFiltrele(HttpSecurity http) throws Exception {// Güvenlik filtre zinciri ayarlari
         http
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // devre dışı değil
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/auth/register", "/auth/login", "/api/heartbeat", "/news/**")
@@ -35,19 +29,25 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // CORS için config
-    @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(List.of("*")); // 🔥 her yerden istek gelebilir
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(List.of("*"));
-        configuration.setAllowCredentials(true);
-        configuration.setExposedHeaders(List.of("Authorization", "Content-Type"));
-        configuration.setMaxAge(3600L);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
+    /*
+     * // CORS için config
+     * 
+     * @Bean
+     * CorsConfigurationSource corsConfigurationSource() {
+     * CorsConfiguration configuration = new CorsConfiguration();
+     * configuration.setAllowedOriginPatterns(List.of("*")); // her yerden istek
+     * gelebilir
+     * configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE",
+     * "OPTIONS"));
+     * configuration.setAllowedHeaders(List.of("*"));
+     * configuration.setAllowCredentials(true);
+     * configuration.setExposedHeaders(List.of("Authorization", "Content-Type"));
+     * configuration.setMaxAge(3600L);
+     * 
+     * UrlBasedCorsConfigurationSource source = new
+     * UrlBasedCorsConfigurationSource();
+     * source.registerCorsConfiguration("/**", configuration);
+     * return source;
+     * }
+     */
 }

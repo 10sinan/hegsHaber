@@ -13,6 +13,7 @@ import com.sinan.hegsHaber.util.JwtUtil;
 import com.sinan.hegsHaber.dto.AuthResponse;
 
 @RestController
+@CrossOrigin
 @Data
 @AllArgsConstructor
 @RequestMapping("/auth")
