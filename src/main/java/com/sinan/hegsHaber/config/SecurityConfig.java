@@ -39,7 +39,15 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(List.of("*")); // 🔥 her yerden istek gelebilir
+        
+        // Spesifik origin'lere izin ver
+        configuration.setAllowedOrigins(List.of(
+            "https://hegs.com.tr",
+            "https://www.hegs.com.tr",
+            "http://localhost:5173",  // development
+            "http://localhost:3000"   // development fallback
+        ));
+        
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
