@@ -13,7 +13,7 @@ import com.sinan.hegsHaber.util.JwtUtil;
 import com.sinan.hegsHaber.dto.AuthResponse;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "*", allowedHeaders = "*") // CORS ayarlari
 @Data
 @AllArgsConstructor
 @RequestMapping("/auth")
