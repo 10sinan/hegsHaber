@@ -59,6 +59,6 @@ public class AuthService {
             UserDto userDto = userMapper.userToUserDto(user);
             return new AuthResponse(userDto, "giris basarılı "); // Token dönülmüyor
         }
-        return new AuthResponse(null, "Giriş başarısız"); // Giris basarisiz
+        return new AuthResponse(null, "Giriş başarısız"); // Giris basarisiz.
     }
 }
