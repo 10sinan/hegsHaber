@@ -2,6 +2,8 @@ package com.sinan.hegsHaber.entity;
 
 import java.security.Timestamp;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,6 +26,14 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private Long id;
+
+    // Kullanıcının arkadaşlarının id'leri
+    @Column
+    private List<Long> friends;
+
+    // Kullanıcının toplam XP'si
+    @Column
+    private Long totalXp = 0L;
 
     @NotBlank
     @Column(unique = true, nullable = false)

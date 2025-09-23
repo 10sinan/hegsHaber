@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 // Kullanicı kayit istegi icin DTO
-public class DTORegisterRequest {
+public class RegisterRequestDTO {
     @NotBlank // Kullanicı adi bos olamaz
     private String username; // Kullanicı adi
 

@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class AuthResponse {// Kimlik dogrulama islemlerinin cevabi
-    private String message; // Islem sonucu mesaji
-    private String token; // JWT eklersek buraya gelir
+public class AuthResponse {
+    private UserDto user;
+    private String basarili;
 }

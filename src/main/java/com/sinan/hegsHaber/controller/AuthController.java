@@ -6,13 +6,15 @@ import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.sinan.hegsHaber.dto.DTORegisterRequest;
-import com.sinan.hegsHaber.dto.DTOLoginRequest;
+
+import com.sinan.hegsHaber.dto.AuthResponse;
+import com.sinan.hegsHaber.dto.LoginRequestDTO;
+import com.sinan.hegsHaber.dto.RegisterRequestDTO;
 import com.sinan.hegsHaber.service.AuthService;
 import com.sinan.hegsHaber.util.JwtUtil;
-import com.sinan.hegsHaber.dto.AuthResponse;
 
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*") // CORS ayarlari
 @Data
 @AllArgsConstructor
 @RequestMapping("/auth")
@@ -27,14 +29,14 @@ public class AuthController {
 
     // Kullanicı kayit endpoint'i
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody DTORegisterRequest request) {// Kayit istegi al
+    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequestDTO request) {// Kayit istegi al
         AuthResponse response = authService.register(request);// Kayit islemini servise devret
-        return ResponseEntity.ok(response);// Kayit sonucunu don
+        return ResponseEntity.status(201).body(response);// Kayit sonucunu 201 ile don
     }
 
     // Kullanicı giris endpoint'i
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody DTOLoginRequest request) {// Giris istegi al
+    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequestDTO request) {// Giris istegi al
         AuthResponse response = authService.login(request);// Giris islemini servise devret
         return ResponseEntity.ok(response);// Giris sonucunu don
     }
