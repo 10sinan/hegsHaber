@@ -1,6 +1,6 @@
 package com.sinan.hegsHaber.entity;
 
-import java.security.Timestamp;
+import java.sql.Timestamp;
 
 import java.util.List;
 
