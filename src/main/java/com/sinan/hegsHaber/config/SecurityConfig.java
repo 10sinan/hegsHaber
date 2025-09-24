@@ -42,10 +42,7 @@ public class SecurityConfig {
         
         // Spesifik origin'lere izin ver
         configuration.setAllowedOrigins(List.of(
-            "https://hegs.com.tr",
-            "https://www.hegs.com.tr",
-            "http://localhost:5173",  // development
-            "http://localhost:3000"   // development fallbackkk
+            "https://www.hegs.com.tr"
         ));
         
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
