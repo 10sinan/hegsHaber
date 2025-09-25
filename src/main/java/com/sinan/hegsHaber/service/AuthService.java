@@ -9,7 +9,7 @@ import com.sinan.hegsHaber.repository.UserRepository;
 import com.sinan.hegsHaber.util.JwtUtil;
 import com.sinan.hegsHaber.mapper.UserMapper;
 import com.sinan.hegsHaber.dto.AuthResponse;
-import com.sinan.hegsHaber.dto.UserDto;
+import com.sinan.hegsHaber.dto.UserDTO;
 import com.sinan.hegsHaber.dto.LoginRequestDTO;
 import com.sinan.hegsHaber.dto.RegisterRequestDTO;
 
@@ -37,14 +37,13 @@ public class AuthService {
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new RuntimeException("E-posta zaten alınmış!");
         }
-        User user = userMapper.dtoToUser(request);// DTO'dan entity'ye dönüşüm
-        // Varsayılan rolü "USER" olarak ayarla, eğer kullanıcı adı "admin" ise rolü "ADMIN" yap
-        if (user.getUsername().equals("admin")) {
-            user.setRole("ADMIN");
-        }
-        user.setPassword(passwordEncoder.encode(request.getPassword()));// Sifreyi hashle
+        User user = userMapper.toUser(request); // DTO'dan entity'ye dönüşüm
+        // Varsayılan rolü "USER" olarak ayarla, eğer kullanıcı adı "admin" ise rolü
+        // "ADMIN" yap
+
+        user.getSecurity().setPasswordHash(passwordEncoder.encode(request.getPassword()));// Sifre
         User savedUser = userRepository.save(user);
-        UserDto userDto = userMapper.userToUserDto(savedUser);
+        UserDTO userDto = userMapper.toUserDTO(savedUser);
         return new AuthResponse(userDto, null);
     }
 
@@ -55,8 +54,8 @@ public class AuthService {
             throw new RuntimeException("Kullanıcı bulunamadı");
         }
         User user = userRepository.findByEmail(request.getEmail());
-        if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            UserDto userDto = userMapper.userToUserDto(user);
+        if (passwordEncoder.matches(request.getPassword(), user.getSecurity().getPasswordHash())) {// Sifre dogrulama(karsilastirma)
+            UserDTO userDto = userMapper.toUserDTO(user);
             return new AuthResponse(userDto, "giris basarılı "); // Token dönülmüyor
         }
         return new AuthResponse(null, "Giriş başarısız"); // Giris basarisiz

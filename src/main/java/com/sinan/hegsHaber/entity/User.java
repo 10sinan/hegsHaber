@@ -4,53 +4,47 @@ import java.security.Timestamp;
 
 import java.util.List;
 
-import jakarta.persistence.Column;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name = "users") // users tablosu veritabaninda bir isim.
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
+@Entity
+@Table(name = "users")
 public class User {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    public Long id;
 
-    private Long id;
+    
+    public String username;
+    public String email;
+    public String authProvider;
+    public Timestamp deletedAt;
 
-    // Kullanıcının arkadaşlarının id'leri
-    @Column
-    private List<Long> friends;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)// OneToOne iliskisi, bir kullanicinin tek bir profile sahip olabilecegini belirtir.
+    public Security security;// kullanici guvenlik bilgileri
 
-    // Kullanıcının toplam XP'si
-    @Column
-    private Long totalXp = 0L;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    public User_profiles profile;// kullanici profili
 
-    @NotBlank
-    @Column(unique = true, nullable = false)
-    private String username;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)// OneToMany iliskisi, bir kullanicinin birden fazla sosyal medya hesabina sahip olabilecegini belirtir.
+    public List<User_social_media> socialMedias;// kullanicinin sosyal medya hesaplari
 
-    @NotBlank
-    @Column(nullable = false)
-    private String password;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    public List<User_subscription> subscriptions;// kullanicinin abonelikleri
 
-    @Column(nullable = false)
-    private String role = "USER";// Varsayılan rol "USER"
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    public List<Payment> payments;// kullanicinin odemeleri
 
-    @NotBlank
-    @Column(unique = true, nullable = false)
-    private String email;// kullanici email
-
-    @Column(updatable = false) // olusturma zamani degistirilemez
-    private Timestamp createdAt;// kullanici olusturma zamani
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    public List<User_interests> interests;// kullanicinin ilgi alanlari
 
 }

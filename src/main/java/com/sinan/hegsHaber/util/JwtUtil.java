@@ -30,7 +30,7 @@ public class JwtUtil {
     public String tokenUret(User user) {// JWT olustur
         return Jwts.builder()// JWT olusturucu
                 .subject(user.getUsername())// Kullanici adini =konu olarak ayarla
-                .claim("role", user.getRole())// Kullanici rolunu ekle
+                .claim(SECRET, user)
                 .issuedAt(new Date())// Olusturulma zamanini ayarla
                 .expiration(new Date(System.currentTimeMillis() + EXPIRATION))// Bitis zamanini ayarla
                 .signWith(key)// Secret key ile imzala
