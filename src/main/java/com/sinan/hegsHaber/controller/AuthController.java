@@ -14,12 +14,12 @@ import com.sinan.hegsHaber.service.AuthService;
 import com.sinan.hegsHaber.util.JwtUtil;
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*") // CORS ayarlari
 @Data
 @AllArgsConstructor
 @RequestMapping("/auth")
 // Kimlik dogrulama islemlerinin yeri
 public class AuthController {
+    
 
     @Autowired
     private AuthService authService;
@@ -38,6 +38,6 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequestDTO request) {// Giris istegi al
         AuthResponse response = authService.login(request);// Giris islemini servise devret
-        return ResponseEntity.ok(response);// Giris sonucunu don
+        return ResponseEntity.status(200).body(response);// Giris sonucunu don
     }
 }
