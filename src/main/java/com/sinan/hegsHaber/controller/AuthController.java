@@ -19,6 +19,7 @@ import com.sinan.hegsHaber.util.JwtUtil;
 @RequestMapping("/auth")
 // Kimlik dogrulama islemlerinin yeri
 public class AuthController {
+    
 
     @Autowired
     private AuthService authService;
