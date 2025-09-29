@@ -6,9 +6,10 @@ import org.springframework.stereotype.Repository;
 import com.sinan.hegsHaber.entity.User;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, UUID> {
     // Kullanicı adi ile kullaniciyi bulma
     Optional<User> findByUsername(String username);// Kullanıcı adı ile kullanıcıyı bul sprşng oto anlıyor
 

@@ -38,6 +38,6 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequestDTO request) {// Giris istegi al
         AuthResponse response = authService.login(request);// Giris islemini servise devret
-        return ResponseEntity.ok(response);// Giris sonucunu don
+        return ResponseEntity.status(200).body(response);// Giris sonucunu don
     }
 }

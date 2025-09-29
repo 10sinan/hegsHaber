@@ -1,18 +1,20 @@
 package com.sinan.hegsHaber.entity;
 
-import java.security.Timestamp;
-
+import java.time.Instant;
 import java.util.List;
-
+import java.util.UUID;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.Data;
 
 @Data
@@ -20,31 +22,50 @@ import lombok.Data;
 @Table(name = "users")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    public Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    public UUID id;
 
-    
+    @Column(nullable = false, unique = true, length = 50)
     public String username;
-    public String email;
-    public String authProvider;
-    public Timestamp deletedAt;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)// OneToOne iliskisi, bir kullanicinin tek bir profile sahip olabilecegini belirtir.
+    @Column(nullable = false, unique = true, length = 150)
+    public String email;
+
+    public Instant deletedAt;
+    public Instant createdAt;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     public Security security;// kullanici guvenlik bilgileri
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    public User_profiles profile;// kullanici profili
+    // Arkadaslik (giden istekler)
+    @OneToMany(mappedBy = "requester")
+    public List<Friendship> sentFriendRequests;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)// OneToMany iliskisi, bir kullanicinin birden fazla sosyal medya hesabina sahip olabilecegini belirtir.
-    public List<User_social_media> socialMedias;// kullanicinin sosyal medya hesaplari
+    // Arkadaslik (gelen istekler)
+    @OneToMany(mappedBy = "receiver")
+    public List<Friendship> receivedFriendRequests;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    public List<User_subscription> subscriptions;// kullanicinin abonelikleri
+    // Kullanıcının oyun kayıtları
+    @OneToMany(mappedBy = "owner")
+    public List<Game> games;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    public List<Payment> payments;// kullanicinin odemeleri
+    @Transient
+    public int getFriendCount() {
+        int accepted = 0;
+        if (sentFriendRequests != null) {
+            accepted += sentFriendRequests.stream().filter(f -> f.getStatus() == Friendship.Status.ACCEPTED).count();
+        }
+        if (receivedFriendRequests != null) {
+            accepted += receivedFriendRequests.stream().filter(f -> f.getStatus() == Friendship.Status.ACCEPTED)
+                    .count();
+        }
+        return accepted;
+    }
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    public List<User_interests> interests;// kullanicinin ilgi alanlari
-
+    @PrePersist
+    public void prePersist() {
+        if (createdAt == null) {
+            createdAt = Instant.now();
+        }
+    }
 }

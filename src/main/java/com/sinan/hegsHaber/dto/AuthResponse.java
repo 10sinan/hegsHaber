@@ -7,6 +7,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class AuthResponse {
-    private UserDTO user;
+    private UserDto user;
     private String basarili;
 }
