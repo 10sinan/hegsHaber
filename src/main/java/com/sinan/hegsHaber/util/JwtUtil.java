@@ -47,7 +47,7 @@ public class JwtUtil {
                                                                             // suresi dolmamis mi
     }
 
-    private boolean tokenSureKontrol(String token) {// Token suresinin dolup dolmadigini kontrol et
+    public boolean tokenSureKontrol(String token) {// Token suresinin dolup dolmadigini kontrol et
         return tokenİcerigiAl(token).getExpiration().before(new Date());// Suresi dolmus mu burayı anlamadim gpt
                                                                         // baktim
     }

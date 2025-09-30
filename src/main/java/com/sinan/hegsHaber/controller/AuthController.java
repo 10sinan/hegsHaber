@@ -19,7 +19,6 @@ import com.sinan.hegsHaber.util.JwtUtil;
 @RequestMapping("/auth")
 // Kimlik dogrulama islemlerinin yeri
 public class AuthController {
-    
 
     @Autowired
     private AuthService authService;
@@ -39,5 +38,12 @@ public class AuthController {
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequestDTO request) {// Giris istegi al
         AuthResponse response = authService.login(request);// Giris islemini servise devret
         return ResponseEntity.status(200).body(response);// Giris sonucunu don
+    }
+
+    // Kullanicı cıkıs endpoint'i
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@RequestHeader(value = "Authorization", required = false) String authHeader) {
+
+        return ResponseEntity.ok().body("Çıkış işlemi tamamlandı");
     }
 }

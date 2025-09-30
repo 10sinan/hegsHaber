@@ -28,7 +28,7 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // devre dışı değil
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/auth/register", "/auth/login", "/api/heartbeat", "/news/**")
+                        .requestMatchers("/auth/**", "/news/**")
                         .permitAll()// Bu endpointlere herkes erisebilir
                         .anyRequest().authenticated());
 
@@ -39,15 +39,15 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        
+
         // Spesifik origin'lere izin ver
         configuration.setAllowedOrigins(List.of(
-            "https://hegs.com.tr",
-            "https://www.hegs.com.tr",
-            "http://localhost:5173",  // development
-            "http://localhost:3000"   // development fallbackkk
+                "https://hegs.com.tr",
+                "https://www.hegs.com.tr",
+                "http://localhost:5173", // development
+                "http://localhost:3000" // development fallbackkk
         ));
-        
+
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
