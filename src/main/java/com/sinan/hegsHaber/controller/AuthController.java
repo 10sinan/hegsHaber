@@ -21,7 +21,7 @@ import com.sinan.hegsHaber.util.JwtUtil;
 public class AuthController {
 
     @Autowired
-    private AuthService authService;
+    private AuthService authService;//
 
     @Autowired
     private JwtUtil jwtUtil;// JWT olusturma ve dogrulama islemleri
