@@ -4,6 +4,8 @@ import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,8 +19,8 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import lombok.Data;
 
-@Data
 @Entity
+@Data
 @Table(name = "users")
 public class User {
     @Id
@@ -45,11 +47,8 @@ public class User {
     @OneToMany(mappedBy = "receiver")
     public List<Friendship> receivedFriendRequests;
 
-    // Kullanıcının oyun kayıtları
-    @OneToMany(mappedBy = "owner")
-    public List<Game> games;
 
-    @Transient
+    @Transient // veritabanında saklama sadece hesapla (gpt)
     public int getFriendCount() {
         int accepted = 0;
         if (sentFriendRequests != null) {

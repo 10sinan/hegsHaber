@@ -6,8 +6,9 @@ import java.util.UUID;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.sinan.hegsHaber.entity.Friendship;
+import com.sinan.hegsHaber.dto.FriendshipDto;
 import com.sinan.hegsHaber.service.FriendshipService;
+import com.sinan.hegsHaber.mapper.FriendshipMapper;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,30 +17,25 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FriendshipController {
 
-    private final FriendshipService friendshipService;// Service bagla
+    private final FriendshipService friendshipService;
+    private final FriendshipMapper friendshipMapper;
 
-    @PostMapping("/request")// Arkadaslik istegi gonder
-    public ResponseEntity<Friendship> sendRequest(@RequestParam UUID fromUserId, @RequestParam UUID toUserId) {
-        return ResponseEntity.ok(friendshipService.sendRequest(fromUserId, toUserId));
+    @PostMapping("/request")
+    public ResponseEntity<FriendshipDto> sendRequest(@RequestParam UUID fromUserId, @RequestParam UUID toUserId) {
+        var entity = friendshipService.sendRequest(fromUserId, toUserId);
+        return ResponseEntity.ok(friendshipMapper.toDto(entity));
     }
 
-    @PostMapping("/respond/{id}")// Arkadaslik istegine cevap ver
-    public ResponseEntity<Friendship> respond(@PathVariable UUID id, @RequestParam boolean accept) {
-        return ResponseEntity.ok(friendshipService.respondRequest(id, accept));
+    @PostMapping("/respond/{id}")
+    public ResponseEntity<FriendshipDto> respond(@PathVariable UUID id, @RequestParam boolean accept) {
+        var entity = friendshipService.respondRequest(id, accept);
+        return ResponseEntity.status(200).body(friendshipMapper.toDto(entity));
     }
 
-    @GetMapping("/friends/{userId}")// Arkadas listesini getir
-    public ResponseEntity<List<Friendship>> listFriends(@PathVariable UUID userId) {
-        return ResponseEntity.ok(friendshipService.listFriends(userId));
-    }
-
-    @GetMapping("/incoming/{userId}")// Gelen arkadaslik isteklerini getir
-    public ResponseEntity<List<Friendship>> incoming(@PathVariable UUID userId) {
-        return ResponseEntity.ok(friendshipService.incomingPending(userId));
-    }
-
-    @GetMapping("/outgoing/{userId}")// Giden arkadaslik isteklerini getir
-    public ResponseEntity<List<Friendship>> outgoing(@PathVariable UUID userId) {
-        return ResponseEntity.ok(friendshipService.outgoingPending(userId));
+    @GetMapping("/friends/{userId}")
+    public ResponseEntity<List<FriendshipDto>> listFriends(@PathVariable UUID userId) {
+        var entities = friendshipService.listFriends(userId);
+        var dtos = entities.stream().map(friendshipMapper::toDto).toList();
+        return ResponseEntity.status(200).body(dtos);
     }
 }

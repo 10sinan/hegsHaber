@@ -18,13 +18,12 @@ import lombok.Data;
 
 
 //Arkadaslik    tablosu
- 
 @Data
 @Entity
 @Table(name = "friendships")
 public class Friendship {
     public enum Status {
-        PENDING, ACCEPTED, REJECTED, BLOCKED
+        PENDING, ACCEPTED, REJECTED, BLOCKED// istek beklemede, kabul edildi, reddedildi, engellendi
     }
 
     @Id
@@ -37,19 +36,24 @@ public class Friendship {
     private User requester;
 
     // Istegi alan kullanici
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "receiver_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)// Lazy yukleme yani gerektiginde yukle
+    @JoinColumn(name = "receiver_id", nullable = false)// Veritabanindaki kolon adi
     private User receiver;
 
+    //@Enumerated ile enum degerlerini veritabaninda nasil saklayacagimizi belirtiyoruz.
+    //EnumType.STRING kullanarak enum degerlerini string olarak sakliyoruz.
     @Enumerated(EnumType.STRING)
-    @Column(length = 20, nullable = false)
-    private Status status = Status.PENDING;
+    @Column(length = 20, nullable = false)// Kolon uzunlugu 20, bos olamaz
+    private Status status = Status.PENDING;// Varsayilan deger PENDING
 
     @Column(nullable = false)
-    private Instant createdAt;
+    //Instant saniye ve nanosaniye duyarliliginda zaman damgasi tutar.
+    private Instant createdAt;// istegin gonderildigi zaman
 
     private Instant respondedAt; // kabul/red zamani
 
+    //@PrePersist ile entity veritabanina kaydedilmeden once calisan metodu belirtiyoruz.
+    //Bu metod, createdAt alanini simdiki zamanla doldurur eger bu alan nullsa.
     @PrePersist
     public void prePersist() {
         if (createdAt == null) {

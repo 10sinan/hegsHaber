@@ -1,9 +1,11 @@
 package com.sinan.hegsHaber.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.sinan.hegsHaber.entity.Security;
 import com.sinan.hegsHaber.entity.User;
 import com.sinan.hegsHaber.repository.UserRepository;
 import com.sinan.hegsHaber.util.JwtUtil;
@@ -33,14 +35,14 @@ public class AuthService {
     private JwtUtil jwtUtil;
 
     // Kullanicı kaydi
-    public AuthResponse register(RegisterRequestDTO request) {
+    public ResponseEntity<AuthResponse> register(RegisterRequestDTO request) {
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new RuntimeException("E-posta zaten alınmış!");
         }
         User user = userMapper.toUser(request); // DTO'dan entity'ye dönüşüm
 
         // Security nesnesi oluştur ve User'a ekle
-        com.sinan.hegsHaber.entity.Security security = new com.sinan.hegsHaber.entity.Security();
+        Security security = new Security();
         security.setPasswordHash(passwordEncoder.encode(request.getPassword()));
         security.setProfileStatus("aktif");
         security.setUser(user);
@@ -48,21 +50,20 @@ public class AuthService {
 
         User savedUser = userRepository.save(user);
         UserDto userDto = userMapper.toUserDTO(savedUser);
-        return new AuthResponse(userDto, null);
+        return ResponseEntity.status(201).body(new AuthResponse(userDto, "Kayıt başarılı")); // 201 Created
     }
 
     // Kullanicı girisi
-    public AuthResponse login(LoginRequestDTO request) {
+    public ResponseEntity<AuthResponse> login(LoginRequestDTO request) {
         boolean exists = userRepository.existsByEmail(request.getEmail());
         if (!exists) {
             throw new RuntimeException("Kullanıcı bulunamadı");
         }
         User user = userRepository.findByEmail(request.getEmail());
-        if (passwordEncoder.matches(request.getPassword(), user.getSecurity().getPasswordHash())) {// Sifre
-                                                                                                   // dogrulama(karsilastirma)
+        if (passwordEncoder.matches(request.getPassword(), user.getSecurity().getPasswordHash())) { // Sifre dogrulama(karsilastirma)
             UserDto userDto = userMapper.toUserDTO(user);
-            return new AuthResponse(userDto, "giris basarılı "); // Token dönülmüyor
+            return ResponseEntity.status(200).body(new AuthResponse(userDto, "giris basarılı ")); // Token dönülmüyor
         }
-        return new AuthResponse(null, "Giriş başarısız"); // Giris basarisiz
+        return ResponseEntity.status(401).body(new AuthResponse(null, "Giriş başarısız")); // Giris basarisiz 401 yetkisiz
     }
 }

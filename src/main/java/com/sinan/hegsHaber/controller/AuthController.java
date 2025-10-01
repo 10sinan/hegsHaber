@@ -29,21 +29,20 @@ public class AuthController {
     // Kullanicı kayit endpoint'i
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequestDTO request) {// Kayit istegi al
-        AuthResponse response = authService.register(request);// Kayit islemini servise devret
-        return ResponseEntity.status(201).body(response);// Kayit sonucunu 201 ile don
+        ResponseEntity<AuthResponse> response = authService.register(request);// Kayit islemini servise devret
+        return response;
     }
 
     // Kullanicı giris endpoint'i
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequestDTO request) {// Giris istegi al
-        AuthResponse response = authService.login(request);// Giris islemini servise devret
-        return ResponseEntity.status(200).body(response);// Giris sonucunu don
+        ResponseEntity<AuthResponse> response = authService.login(request);// Giris islemini servise devret
+        return response;
     }
 
     // Kullanicı cıkıs endpoint'i
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(@RequestHeader(value = "Authorization", required = false) String authHeader) {
-
-        return ResponseEntity.ok().body("Çıkış işlemi tamamlandı");
+    public ResponseEntity<?> logout(@RequestHeader(value = "Authorization", required = false) String authHeader) {// Cıkıs istegi al
+        return ResponseEntity.status(200).body("Çıkış işlemi tamamlandı");
     }
 }

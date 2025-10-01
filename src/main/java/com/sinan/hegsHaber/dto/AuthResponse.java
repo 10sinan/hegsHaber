@@ -8,5 +8,5 @@ import lombok.Data;
 @AllArgsConstructor
 public class AuthResponse {
     private UserDto user;
-    private String basarili;
+    private String message;
 }

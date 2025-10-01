@@ -14,18 +14,18 @@ import com.sinan.hegsHaber.entity.User;
 @Repository
 public interface FriendshipRepository extends JpaRepository<Friendship, UUID> {
     List<Friendship> findByRequester(User requester);
-
-    @Query("select f from Friendship f where f.status = :status and (f.requester = :user or f.receiver = :user)")
-    List<Friendship> findAllByUserAndStatus(@Param("user") User user, @Param("status") Friendship.Status status);
+    //@Query ile custom sorgular yazabiliriz
+    @Query("select f from Friendship f where f.status = :status and (f.requester = :user or f.receiver = :user)")// Kullanici ve durum ile ara
+    List<Friendship> findAllByUserAndStatus(@Param("user") User user, @Param("status") Friendship.Status status);//
 
     @Query("select count(f) > 0 from Friendship f where (f.requester = :u1 and f.receiver = :u2) or (f.requester = :u2 and f.receiver = :u1)")
     boolean existsAnyDirection(@Param("u1") User u1, @Param("u2") User u2);
 
-    List<Friendship> findByReceiver(User receiver);
+    List<Friendship> findByReceiver(User receiver);// Receiver a gore ara
 
-    List<Friendship> findByRequesterAndStatus(User requester, Friendship.Status status);
+    List<Friendship> findByRequesterAndStatus(User requester, Friendship.Status status);// istek atan  ve duruma gore ara
 
-    List<Friendship> findByReceiverAndStatus(User receiver, Friendship.Status status);
+    List<Friendship> findByReceiverAndStatus(User receiver, Friendship.Status status);// istek alan ve duruma gore ara
 
-    boolean existsByRequesterAndReceiver(User requester, User receiver);
+    boolean existsByRequesterAndReceiver(User requester, User receiver);// istek atan  ve istek alan a gore var mi diye bak
 }
