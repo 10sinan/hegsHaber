@@ -20,22 +20,16 @@ public class FriendshipController {
     private final FriendshipService friendshipService;
     private final FriendshipMapper friendshipMapper;
 
-    @PostMapping("/request")
-    public ResponseEntity<FriendshipDto> sendRequest(@RequestParam UUID fromUserId, @RequestParam UUID toUserId) {
-        var entity = friendshipService.sendRequest(fromUserId, toUserId);
+    @PostMapping("/follow")
+    public ResponseEntity<FriendshipDto> follow(@RequestParam UUID followerId, @RequestParam UUID followingId) {
+        var entity = friendshipService.follow(followerId, followingId);
         return ResponseEntity.ok(friendshipMapper.toDto(entity));
     }
 
-    @PostMapping("/respond/{id}")
-    public ResponseEntity<FriendshipDto> respond(@PathVariable UUID id, @RequestParam boolean accept) {
-        var entity = friendshipService.respondRequest(id, accept);
-        return ResponseEntity.status(200).body(friendshipMapper.toDto(entity));
-    }
-
-    @GetMapping("/friends/{userId}")
-    public ResponseEntity<List<FriendshipDto>> listFriends(@PathVariable UUID userId) {
-        var entities = friendshipService.listFriends(userId);
+    @GetMapping("/list/{userId}")
+    public ResponseEntity<List<FriendshipDto>> list(@PathVariable UUID userId) {
+        var entities = friendshipService.listFollows(userId);
         var dtos = entities.stream().map(friendshipMapper::toDto).toList();
-        return ResponseEntity.status(200).body(dtos);
+        return ResponseEntity.ok(dtos);
     }
 }

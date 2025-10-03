@@ -42,7 +42,7 @@ public class AuthController {
 
     // Kullanicı cıkıs endpoint'i
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(@RequestHeader(value = "Authorization", required = false) String authHeader) {// Cıkıs istegi al
+    public ResponseEntity<?> logout(@RequestHeader(value = "Authorization", required = false) String authHeader) {
         return ResponseEntity.status(200).body("Çıkış işlemi tamamlandı");
     }
 }

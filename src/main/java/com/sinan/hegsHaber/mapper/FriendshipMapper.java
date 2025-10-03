@@ -8,11 +8,9 @@ import org.mapstruct.Named;
 
 @Mapper(componentModel = "spring")
 public interface FriendshipMapper {
-    @Mapping(target = "requesterUsername", source = "requester.username")
-    @Mapping(target = "receiverUsername", source = "receiver.username")
-    @Mapping(target = "status", source = "status")
+    @Mapping(target = "followerUsername", source = "follower.username")
+    @Mapping(target = "followingUsername", source = "following.username")
     @Mapping(target = "createdAt", source = "createdAt", qualifiedByName = "instantToString")
-    @Mapping(target = "respondedAt", source = "respondedAt", qualifiedByName = "instantToString")
     FriendshipDto toDto(Friendship friendship);
 
     @Named("instantToString")

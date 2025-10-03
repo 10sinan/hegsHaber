@@ -41,29 +41,27 @@ public class AuthService {
         }
         User user = userMapper.toUser(request); // DTO'dan entity'ye dönüşüm
 
-        // Security nesnesi oluştur ve User'a ekle
         Security security = new Security();
         security.setPasswordHash(passwordEncoder.encode(request.getPassword()));
-        security.setProfileStatus("aktif");
+        security.setProfileStatus("PUBLIC"); // DB constraint'e uygun
         security.setUser(user);
         user.setSecurity(security);
 
         User savedUser = userRepository.save(user);
         UserDto userDto = userMapper.toUserDTO(savedUser);
-        return ResponseEntity.status(201).body(new AuthResponse(userDto, "Kayıt başarılı")); // 201 Created
+        return ResponseEntity.status(201).body(new AuthResponse(userDto, "Kayıt başarılı"));
     }
 
     // Kullanicı girisi
     public ResponseEntity<AuthResponse> login(LoginRequestDTO request) {
-        boolean exists = userRepository.existsByEmail(request.getEmail());
-        if (!exists) {
-            throw new RuntimeException("Kullanıcı bulunamadı");
-        }
         User user = userRepository.findByEmail(request.getEmail());
-        if (passwordEncoder.matches(request.getPassword(), user.getSecurity().getPasswordHash())) { // Sifre dogrulama(karsilastirma)
-            UserDto userDto = userMapper.toUserDTO(user);
-            return ResponseEntity.status(200).body(new AuthResponse(userDto, "giris basarılı ")); // Token dönülmüyor
+        if (user == null) {
+            return ResponseEntity.status(404).body(new AuthResponse(null, "kullanıcı yok bulunamadı "));
         }
-        return ResponseEntity.status(401).body(new AuthResponse(null, "Giriş başarısız")); // Giris basarisiz 401 yetkisiz
+        if (!passwordEncoder.matches(request.getPassword(), user.getSecurity().getPasswordHash())) {
+            return ResponseEntity.status(401).body(new AuthResponse(null, "Giriş başarısız"));
+        }
+        UserDto userDto = userMapper.toUserDTO(user);
+        return ResponseEntity.ok(new AuthResponse(userDto, "Giriş başarılı"));
     }
 }

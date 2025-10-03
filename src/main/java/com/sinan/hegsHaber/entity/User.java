@@ -4,7 +4,6 @@ import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -24,40 +23,42 @@ import lombok.Data;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public UUID id;
+    @Column(name = "uuid", columnDefinition = "UUID")
+    private UUID id;
 
-    @Column(nullable = false, unique = true, length = 50)
-    public String username;
+    @Column(nullable = false, unique = true, length = 100)
+    private String username;
 
-    @Column(nullable = false, unique = true, length = 150)
-    public String email;
+    @Column(nullable = false, unique = true, length = 255)
+    private String email;
 
-    public Instant deletedAt;
-    public Instant createdAt;
+    @Column(name = "deleted_at")
+    private Instant deletedAt;
+
+    @Column(name = "created_at")
+    private Instant createdAt;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    public Security security;// kullanici guvenlik bilgileri
+    private Security security;// kullanici guvenlik bilgileri
 
-    // Arkadaslik (giden istekler)
-    @OneToMany(mappedBy = "requester")
-    public List<Friendship> sentFriendRequests;
+    // Takip ettiklerim (ben follower'ım) -> friends.follower_uuid
+    @OneToMany(mappedBy = "follower")
+    private List<Friendship> sentFriendRequests;
 
-    // Arkadaslik (gelen istekler)
-    @OneToMany(mappedBy = "receiver")
-    public List<Friendship> receivedFriendRequests;
-
+    // Beni takip edenler (ben following'im) -> friends.following_uuid
+    @OneToMany(mappedBy = "following")
+    private List<Friendship> receivedFriendRequests;
 
     @Transient // veritabanında saklama sadece hesapla (gpt)
     public int getFriendCount() {
-        int accepted = 0;
+        int total = 0;
         if (sentFriendRequests != null) {
-            accepted += sentFriendRequests.stream().filter(f -> f.getStatus() == Friendship.Status.ACCEPTED).count();
+            total += sentFriendRequests.size();
         }
         if (receivedFriendRequests != null) {
-            accepted += receivedFriendRequests.stream().filter(f -> f.getStatus() == Friendship.Status.ACCEPTED)
-                    .count();
+            total += receivedFriendRequests.size();
         }
-        return accepted;
+        return total;
     }
 
     @PrePersist

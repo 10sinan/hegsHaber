@@ -1,31 +1,25 @@
 package com.sinan.hegsHaber.entity;
 
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.MapsId;
-import jakarta.persistence.OneToOne;
-
+import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "security") // security tablosu veritabaninda bir isim.
-
+@Table(name = "security")
 public class Security {
     @Id
-    private java.util.UUID id; // User ile ayni UUID primary key
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id; // DB: BIGSERIAL PRIMARY KEY
 
-    private String passwordHash;// Sifrelenmis parola
-    private String profileStatus;// Kullanici profil durumu (ornek: aktif, pasif, askida)
+    @Column(name = "password_hash", nullable = false, length = 255)
+    private String passwordHash;
+
+    @Column(name = "profile_status", length = 20)
+    private String profileStatus; // PUBLIC / PRIVATE
 
     @OneToOne
     @JsonIgnore
-    @MapsId // Primary key olarak kullanici id'sini kullan
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_uuid", referencedColumnName = "uuid")
     private User user;
-
 }
