@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class FriendshipDto {
     private Long id;
-    private String followingUsername;
+    private String username;
     private String createdAt;
 }

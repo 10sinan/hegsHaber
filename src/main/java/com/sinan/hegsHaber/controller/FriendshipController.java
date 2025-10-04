@@ -21,7 +21,7 @@ public class FriendshipController {
     private final FriendshipService friendshipService;//
     private final FriendshipMapper friendshipMapper;// DTO-Entity dönüşümleri için
 
-    @PostMapping("/follow")
+    @PostMapping("/follow")// Takip etme işlemi
     public ResponseEntity<FriendshipDto> follow(@RequestParam UUID followerId, @RequestParam UUID followingId) {
         var response = friendshipService.follow(followerId, followingId);
         if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
