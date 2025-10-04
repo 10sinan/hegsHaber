@@ -29,8 +29,8 @@ public class UserService {
         return userRepository.findAll();// Kullanıcı listesini döner
     }
 
-    public ResponseEntity<List<User>> searchUsersByName(String name) {
-        List<User> users = userRepository.findByNameContainingIgnoreCase(name);
+    public ResponseEntity<List<User>> searchUsersByName(String username) {
+        List<User> users = userRepository.findByUsernameContainingIgnoreCase(username);
         return ResponseEntity.status(HttpStatus.OK).body(users);
     }
 

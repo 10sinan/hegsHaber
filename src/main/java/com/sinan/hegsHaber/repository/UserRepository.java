@@ -19,7 +19,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     boolean existsByEmail(String email);
 
-    List<User> findByNameContainingIgnoreCase(String name);
+    List<User> findByUsernameContainingIgnoreCase(String username);// kullanıcı adına göre ara büyük küçük dikkate alma
 
     User findByEmail(String email);
 }
