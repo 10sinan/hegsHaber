@@ -39,4 +39,19 @@ public class NewsController {
         return newsService.haberiCek("https://www.aa.com.tr/tr/rss/default?cat=ekonomi", 10);// haberleri cek
     }
 
+    @GetMapping("/spor")
+    public List<NewsDto> getSpor() {
+        return newsService.haberiCek("https://www.aa.com.tr/tr/rss/default?cat=spor", 10);// haberleri cek
+    }
+
+    @GetMapping("/saglik")
+    public List<NewsDto> getSaglik() {
+        return newsService.haberiCek("https://www.aa.com.tr/tr/rss/default?cat=saglik", 10);// haberleri cek
+    }
+
+    @GetMapping("/teknoloji")
+    public List<NewsDto> getTeknoloji() {
+        return newsService.haberiCek("https://www.aa.com.tr/tr/rss/default?cat=teknoloji", 10);// haberleri cek
+    }
+
 }
