@@ -2,6 +2,8 @@ package com.sinan.hegsHaber.service;
 
 import java.util.List;
 import java.util.UUID;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.sinan.hegsHaber.entity.Friendship;
@@ -20,21 +22,25 @@ public class FriendshipService {// Arkadaslik islemlerini yapar
     // @Transactional Metodun içindeki tüm veritabanı işlemleri başarılı olursa,
     // değişiklikler kalıcı olur basarısısz olur sa geri alınır
     @Transactional
-    public Friendship follow(UUID followerId, UUID followingId) {
+    public ResponseEntity<Friendship> follow(UUID followerId, UUID followingId) {
         if (followerId.equals(followingId)) {
-            throw new IllegalArgumentException("Kendini takip edemezsin");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
         User follower = userRepository.findById(followerId)
-                .orElseThrow(() -> new IllegalArgumentException("Takip eden kullanici yok"));
+                .orElse(null);// Kullanici yoksa null 
         User following = userRepository.findById(followingId)
-                .orElseThrow(() -> new IllegalArgumentException("Takip edilen kullanici yok"));
+                .orElse(null);// Kullanici yoksa null 
+        if (follower == null || following == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();// Kullanici yoksa 404 doner
+        }
         if (friendshipRepository.existsAnyDirection(follower, following)) {
-            throw new IllegalStateException("Zaten takip ilişkisi var");
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();// Zaten takip ediliyorsa 409 doner
         }
         Friendship f = new Friendship();
         f.setFollower(follower);
         f.setFollowing(following);
-        return friendshipRepository.save(f);
+        Friendship saved = friendshipRepository.save(f);
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved);// 201 Created doner
     }
 
     public List<Friendship> listFollows(UUID userId) {
@@ -42,15 +48,19 @@ public class FriendshipService {// Arkadaslik islemlerini yapar
         return friendshipRepository.findByFollower(u);
     }
 
-    public void unfollow(UUID followerId, UUID followingId) {
+    public ResponseEntity<Void> unfollow(UUID followerId, UUID followingId) {
         User follower = userRepository.findById(followerId)
-                .orElseThrow(() -> new IllegalArgumentException("Takip eden kullanici yok"));
+                .orElse(null);
         User following = userRepository.findById(followingId)
-                .orElseThrow(() -> new IllegalArgumentException("Takip edilen kullanici yok"));
+                .orElse(null);
+        if (follower == null || following == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
         Friendship friendship = friendshipRepository.findByFollowerAndFollowing(follower, following);
         if (friendship == null) {
-            throw new IllegalArgumentException("Takip ilişkisi bulunamadı");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         friendshipRepository.delete(friendship);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

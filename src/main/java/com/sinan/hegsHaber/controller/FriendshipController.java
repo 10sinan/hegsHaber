@@ -22,10 +22,12 @@ public class FriendshipController {
     private final FriendshipMapper friendshipMapper;// DTO-Entity dönüşümleri için
 
     @PostMapping("/follow")
-    //@requestparam demek query parametreleri 
     public ResponseEntity<FriendshipDto> follow(@RequestParam UUID followerId, @RequestParam UUID followingId) {
-        var entity = friendshipService.follow(followerId, followingId);
-        return ResponseEntity.status(HttpStatus.CREATED).body(friendshipMapper.toDto(entity));
+        var response = friendshipService.follow(followerId, followingId);
+        if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(friendshipMapper.toDto(response.getBody()));
+        }
+        return ResponseEntity.status(response.getStatusCode()).build();
     }
 
     @GetMapping("/list/{userId}")
@@ -37,7 +39,6 @@ public class FriendshipController {
 
     @DeleteMapping("/unfollow")
     public ResponseEntity<Void> unfollow(@RequestParam UUID followerId, @RequestParam UUID followingId) {
-        friendshipService.unfollow(followerId, followingId);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return friendshipService.unfollow(followerId, followingId);
     }
 }

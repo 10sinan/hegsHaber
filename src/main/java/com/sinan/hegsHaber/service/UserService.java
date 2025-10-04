@@ -1,5 +1,8 @@
 package com.sinan.hegsHaber.service;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -23,27 +26,12 @@ public class UserService {
     }
 
     public List<User> getAllUsers() {
-        return userRepository.findAll();//Kullanıcı listesini döner
+        return userRepository.findAll();// Kullanıcı listesini döner
     }
 
-    public User createUser(User user) {
-        return userRepository.save(user);
-    }
-
-    public User updateUser(UUID id, User user) {
-
-        if (userRepository.existsById(id)) {
-            user.setId(id);
-            return userRepository.save(user);
-        }
-        return null;
-    }
-
-    public void deleteUser(UUID id) {
-        if (userRepository.existsById(id)) {
-            userRepository.deleteById(id);
-        }
-
+    public ResponseEntity<List<User>> searchUsersByName(String name) {
+        List<User> users = userRepository.findByNameContainingIgnoreCase(name);
+        return ResponseEntity.status(HttpStatus.OK).body(users);
     }
 
 }
