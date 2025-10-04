@@ -8,6 +8,7 @@ import org.mapstruct.Named;
 
 @Mapper(componentModel = "spring")
 public interface FriendshipMapper {
+    @Mapping(target = "id", source = "id", qualifiedByName = "longToUuid")
     @Mapping(target = "username", source = "following.username")
     @Mapping(target = "createdAt", source = "createdAt", qualifiedByName = "instantToString")
     FriendshipDto toDto(Friendship friendship);
@@ -15,5 +16,10 @@ public interface FriendshipMapper {
     @Named("instantToString")
     public static String instantToString(java.time.Instant instant) {
         return instant == null ? null : instant.toString();
+    }
+
+    @Named("longToUuid")
+    public static java.util.UUID longToUuid(Long value) {
+        return value == null ? null : new java.util.UUID(0L, value);
     }
 }
