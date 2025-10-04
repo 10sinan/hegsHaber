@@ -8,7 +8,7 @@ import org.mapstruct.Named;
 
 @Mapper(componentModel = "spring")
 public interface FriendshipMapper {
-    @Mapping(target = "id", source = "follower.id")
+    @Mapping(target = "id", source = "following.id")
     @Mapping(target = "username", source = "following.username")
     @Mapping(target = "createdAt", source = "createdAt", qualifiedByName = "instantToString")
     FriendshipDto toDto(Friendship friendship);
