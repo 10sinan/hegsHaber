@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class TaskService {
@@ -18,9 +17,10 @@ public class TaskService {
         return taskRepository.findAll().stream().limit(3).toList();// İlk 3 görevi döndür
     }
 
-    public Optional<Task> getTaskById(UUID id) {// ID'ye göre görevi bul
+    public Optional<Task> getTaskById(Long id) { // ID'ye göre görevi bul
         return taskRepository.findById(id);
     }
+
     public Task createTask(Task task) {
         return taskRepository.save(task);
     }

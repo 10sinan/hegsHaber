@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import com.sinan.hegsHaber.entity.User;
 import com.sinan.hegsHaber.repository.UserRepository;
+import com.sinan.hegsHaber.dto.UserDto;
+import com.sinan.hegsHaber.mapper.UserMapper;
 
 import lombok.Data;
 
@@ -21,17 +23,23 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public User getUserById(UUID id) {
-        return userRepository.findById(id).orElse(null);// Kullanıcı bulunamazsa null döner
+    @Autowired
+    private UserMapper userMapper;
+
+    public UserDto getUserById(UUID id) {
+        User user = userRepository.findById(id).orElse(null);
+        return user != null ? userMapper.toUserDTO(user) : null;
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();// Kullanıcı listesini döner
+    public List<UserDto> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return users.stream().map(userMapper::toUserDTO).toList();
     }
 
-    public ResponseEntity<List<User>> searchUsersByName(String username) {
+    public ResponseEntity<List<UserDto>> searchUsersByName(String username) {
         List<User> users = userRepository.findByUsernameContainingIgnoreCase(username);
-        return ResponseEntity.status(HttpStatus.OK).body(users);
+        List<UserDto> userDtos = users.stream().map(userMapper::toUserDTO).toList();
+        return ResponseEntity.status(HttpStatus.OK).body(userDtos);
     }
 
 }

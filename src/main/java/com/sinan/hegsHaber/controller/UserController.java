@@ -1,10 +1,12 @@
 package com.sinan.hegsHaber.controller;
 
+import org.springframework.http.ResponseEntity;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
-import com.sinan.hegsHaber.entity.User;
+import com.sinan.hegsHaber.dto.UserDto;
 import com.sinan.hegsHaber.service.UserService;
 
 @RestController
@@ -15,18 +17,18 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable UUID id) {
+    public UserDto getUserById(@PathVariable UUID id) {
         return userService.getUserById(id);
     }
 
     @GetMapping
-    public List<User> getAllUsers() {
+    public List<UserDto> getAllUsers() {
         return userService.getAllUsers();
     }
 
     @GetMapping("/search")
-    public List<User> searchUsersByName(@RequestParam String name) {
-        return userService.searchUsersByName(name).getBody();
+    public ResponseEntity<List<UserDto>> searchUsersByName(@RequestParam String name) {
+        return userService.searchUsersByName(name);
     }
 
 }
