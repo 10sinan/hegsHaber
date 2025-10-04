@@ -17,7 +17,9 @@ public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
     @Query("select count(f) > 0 from Friendship f where (f.follower = :u1 and f.following = :u2) or (f.follower = :u2 and f.following = :u1)")
     boolean existsAnyDirection(@Param("u1") User u1, @Param("u2") User u2);
 
-    List<Friendship> findByFollowing(User following);
+    List<Friendship> findByFollowing(User following);// Takip edenleri listelemek için ekledim
 
-    boolean existsByFollowerAndFollowing(User follower, User following);
+    boolean existsByFollowerAndFollowing(User follower, User following);// Takip ilişkisi var mı kontrolü için ekledim
+
+    Friendship findByFollowerAndFollowing(User follower, User following);// Takip ilişkisini bulmak için ekledim
 }

@@ -11,7 +11,7 @@ import com.sinan.hegsHaber.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
-@RequiredArgsConstructor // Constructor injection icin
+@RequiredArgsConstructor // Constructor injection için
 public class FriendshipService {// Arkadaslik islemlerini yapar
 
     private final FriendshipRepository friendshipRepository;
@@ -40,5 +40,17 @@ public class FriendshipService {// Arkadaslik islemlerini yapar
     public List<Friendship> listFollows(UUID userId) {
         User u = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("Kullanici yok"));
         return friendshipRepository.findByFollower(u);
+    }
+
+    public void unfollow(UUID followerId, UUID followingId) {
+        User follower = userRepository.findById(followerId)
+                .orElseThrow(() -> new IllegalArgumentException("Takip eden kullanici yok"));
+        User following = userRepository.findById(followingId)
+                .orElseThrow(() -> new IllegalArgumentException("Takip edilen kullanici yok"));
+        Friendship friendship = friendshipRepository.findByFollowerAndFollowing(follower, following);
+        if (friendship == null) {
+            throw new IllegalArgumentException("Takip ilişkisi bulunamadı");
+        }
+        friendshipRepository.delete(friendship);
     }
 }

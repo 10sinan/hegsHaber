@@ -2,6 +2,8 @@ package com.sinan.hegsHaber.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,9 +37,21 @@ public class AuthController {
 
     // Kullanicı giris endpoint'i
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequestDTO request) {// Giris istegi al
-        ResponseEntity<AuthResponse> response = authService.login(request);// Giris islemini servise devret
-        return response;
+    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequestDTO request, HttpServletResponse response) {
+        ResponseEntity<AuthResponse> authResponse = authService.login(request);
+
+        // JWT token'ı cookie olarak ekle
+        AuthResponse body = authResponse.getBody();
+        if (body != null && body.getToken() != null) {
+            String jwtToken = body.getToken();
+            Cookie cookie = new Cookie("jwt", jwtToken);
+            cookie.setHttpOnly(true); // JavaScript erişemesin
+            cookie.setPath("/"); // Tüm path'lerde geçerli olsun
+            cookie.setMaxAge(60 * 60 * 24 * 30); // 1 ay geçerli
+            response.addCookie(cookie);
+        }
+
+        return authResponse;
     }
 
     // Kullanicı cıkıs endpoint'i

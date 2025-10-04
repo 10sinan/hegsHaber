@@ -3,6 +3,7 @@ package com.sinan.hegsHaber.controller;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,19 +18,25 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FriendshipController {
 
-    private final FriendshipService friendshipService;
-    private final FriendshipMapper friendshipMapper;
+    private final FriendshipService friendshipService;//
+    private final FriendshipMapper friendshipMapper;// DTO-Entity dönüşümleri için
 
     @PostMapping("/follow")
     public ResponseEntity<FriendshipDto> follow(@RequestParam UUID followerId, @RequestParam UUID followingId) {
         var entity = friendshipService.follow(followerId, followingId);
-        return ResponseEntity.ok(friendshipMapper.toDto(entity));
+        return ResponseEntity.status(HttpStatus.CREATED).body(friendshipMapper.toDto(entity));
     }
 
     @GetMapping("/list/{userId}")
     public ResponseEntity<List<FriendshipDto>> list(@PathVariable UUID userId) {
-        var entities = friendshipService.listFollows(userId);
-        var dtos = entities.stream().map(friendshipMapper::toDto).toList();
-        return ResponseEntity.ok(dtos);
+        var entities = friendshipService.listFollows(userId);// Kullanıcının takip ettiği kişileri listele
+        var dtos = entities.stream().map(friendshipMapper::toDto).toList();// Entity'leri DTO'lara dönüştür
+        return ResponseEntity.status(HttpStatus.OK).body(dtos);// DTO listesini döndür
+    }
+
+    @DeleteMapping("/unfollow")
+    public ResponseEntity<Void> unfollow(@RequestParam UUID followerId, @RequestParam UUID followingId) {
+        friendshipService.unfollow(followerId, followingId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

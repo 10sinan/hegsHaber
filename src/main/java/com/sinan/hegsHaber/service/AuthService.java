@@ -49,19 +49,20 @@ public class AuthService {
 
         User savedUser = userRepository.save(user);
         UserDto userDto = userMapper.toUserDTO(savedUser);
-        return ResponseEntity.status(201).body(new AuthResponse(userDto, "Kayıt başarılı"));
+        return ResponseEntity.status(201).body(new AuthResponse(userDto, "Kayıt başarılı", null));
     }
 
     // Kullanicı girisi
     public ResponseEntity<AuthResponse> login(LoginRequestDTO request) {
         User user = userRepository.findByEmail(request.getEmail());
         if (user == null) {
-            return ResponseEntity.status(404).body(new AuthResponse(null, "kullanıcı yok bulunamadı "));
+            return ResponseEntity.status(404).body(new AuthResponse(null, "kullanıcı yok bulunamadı ", null));
         }
         if (!passwordEncoder.matches(request.getPassword(), user.getSecurity().getPasswordHash())) {
-            return ResponseEntity.status(401).body(new AuthResponse(null, "Giriş başarısız"));
+            return ResponseEntity.status(401).body(new AuthResponse(null, "Giriş başarısız", null));
         }
         UserDto userDto = userMapper.toUserDTO(user);
-        return ResponseEntity.ok(new AuthResponse(userDto, "Giriş başarılı"));
+        // Token sadece cookie'ye yazılacak, response body'de dönmeyecek
+        return ResponseEntity.ok(new AuthResponse(userDto, "Giriş başarılı", null));
     }
 }
