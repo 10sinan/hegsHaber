@@ -1,5 +1,6 @@
 package com.sinan.hegsHaber.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,18 +18,24 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/{id}")
-    public UserDto getUserById(@PathVariable UUID id) {
-        return userService.getUserById(id);
+    public ResponseEntity<UserDto> getUserById(@PathVariable UUID id) {
+        UserDto user = userService.getUserById(id);
+        return user != null ? ResponseEntity.ok(user) : ResponseEntity.notFound().build();
     }
 
-    @GetMapping
-    public List<UserDto> getAllUsers() {
-        return userService.getAllUsers();
+    @GetMapping("/getAll")
+    public ResponseEntity<List<UserDto>> getAllUsers() {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getAllUsers());
     }
 
     @GetMapping("/search")
     public ResponseEntity<List<UserDto>> searchUsersByName(@RequestParam String name) {
-        return userService.searchUsersByName(name);
+        return ResponseEntity.status(HttpStatus.OK).body(userService.searchUsersByName(name));
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<Long> getUserCount() {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getUserCount());
     }
 
 }

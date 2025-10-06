@@ -1,8 +1,5 @@
 package com.sinan.hegsHaber.service;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
-
 import java.util.List;
 import java.util.UUID;
 
@@ -36,10 +33,12 @@ public class UserService {
         return users.stream().map(userMapper::toUserDTO).toList();
     }
 
-    public ResponseEntity<List<UserDto>> searchUsersByName(String username) {
+    public List<UserDto> searchUsersByName(String username) {
         List<User> users = userRepository.findByUsernameContainingIgnoreCase(username);
-        List<UserDto> userDtos = users.stream().map(userMapper::toUserDTO).toList();
-        return ResponseEntity.status(HttpStatus.OK).body(userDtos);
+        return users.stream().map(userMapper::toUserDTO).toList();// kullanıcı bulunamazsa boş liste döner
     }
 
+    public long getUserCount() {
+        return userRepository.count();
+    }
 }
