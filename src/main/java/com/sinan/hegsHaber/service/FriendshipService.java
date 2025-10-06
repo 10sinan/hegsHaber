@@ -1,5 +1,6 @@
 package com.sinan.hegsHaber.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.http.ResponseEntity;
@@ -26,41 +27,64 @@ public class FriendshipService {// Arkadaslik islemlerini yapar
         if (followerId.equals(followingId)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-        User follower = userRepository.findById(followerId)
-                .orElse(null);// Kullanici yoksa null 
-        User following = userRepository.findById(followingId)
-                .orElse(null);// Kullanici yoksa null 
+        User follower = userRepository.findById(followerId).orElse(null);//
+        User following = userRepository.findById(followingId).orElse(null);
         if (follower == null || following == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();// Kullanici yoksa 404 doner
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        if (friendshipRepository.existsAnyDirection(follower, following)) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();// Zaten takip ediliyorsa 409 doner
+        // Her iki yönde de arkadaşlık var mı kontrol et
+        boolean existsAB = friendshipRepository.existsAnyDirection(follower, following);
+        boolean existsBA = friendshipRepository.existsAnyDirection(following, follower);
+        if (existsAB || existsBA) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
-        Friendship f = new Friendship();
-        f.setFollower(follower);
-        f.setFollowing(following);
-        Friendship saved = friendshipRepository.save(f);
-        return ResponseEntity.status(HttpStatus.CREATED).body(saved);// 201 Created doner
+        // A->B
+        Friendship f1 = new Friendship();
+        f1.setFollower(follower);
+        f1.setFollowing(following);
+        Friendship saved1 = friendshipRepository.save(f1);
+        // B->A
+        Friendship f2 = new Friendship();
+        f2.setFollower(following);
+        f2.setFollowing(follower);
+        // Sadece birini döndür (A->B)
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved1);
     }
 
     public List<Friendship> listFollows(UUID userId) {
         User u = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("Kullanici yok"));
-        return friendshipRepository.findByFollower(u);
+        List<Friendship> asFollower = friendshipRepository.findByFollower(u);
+        List<Friendship> asFollowing = friendshipRepository.findByFollowing(u);
+        List<Friendship> all = new ArrayList<>();
+        all.addAll(asFollower);
+        for (Friendship f : asFollowing) {
+            if (all.stream().noneMatch(x -> x.getId().equals(f.getId()))) {
+                all.add(f);
+            }
+        }
+        return all;
     }
 
     public ResponseEntity<Void> unfollow(UUID followerId, UUID followingId) {
-        User follower = userRepository.findById(followerId)
-                .orElse(null);
-        User following = userRepository.findById(followingId)
-                .orElse(null);
+        User follower = userRepository.findById(followerId).orElse(null);
+        User following = userRepository.findById(followingId).orElse(null);
         if (follower == null || following == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        Friendship friendship = friendshipRepository.findByFollowerAndFollowing(follower, following);
-        if (friendship == null) {
+        Friendship friendshipAB = friendshipRepository.findByFollowerAndFollowing(follower, following);
+        Friendship friendshipBA = friendshipRepository.findByFollowerAndFollowing(following, follower);
+        boolean found = false;
+        if (friendshipAB != null) {
+            friendshipRepository.delete(friendshipAB);
+            found = true;
+        }
+        if (friendshipBA != null) {
+            friendshipRepository.delete(friendshipBA);
+            found = true;
+        }
+        if (!found) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        friendshipRepository.delete(friendship);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

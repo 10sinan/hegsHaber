@@ -3,7 +3,6 @@ package com.sinan.hegsHaber.service;
 import com.sinan.hegsHaber.dto.Leaderboard;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.ArrayList;
 import java.util.UUID;
 
 import java.util.List;
@@ -21,17 +20,20 @@ public class UserGameService {
     private UserRepository userRepository;
 
     public List<Leaderboard> getLeaderboardByTotalXp() {
-        List<UserGame> allGames = userGameRepository.findAll();
-        Map<UUID, Leaderboard> map = new HashMap<>();
-        for (UserGame ug : allGames) {// usergame tablosundaki her kayıt için 
-            Leaderboard entry = map.getOrDefault(ug.getUserUuid(), new Leaderboard());// kullanıcıya ait mevcut liderlik tablosu girdisini al veya yeni oluştur
-            entry.setUserUuid(ug.getUserUuid());// kullanıcı uuid'sini ayarla
-            entry.setTotalXp(entry.getTotalXp() + (ug.getXpEarned() != null ? ug.getXpEarned() : 0));// toplam xp'yi güncelle
-            // Kullanıcı adını ekle
-            userRepository.findById(ug.getUserUuid()).ifPresent(user -> entry.setUsername(user.getUsername()));
-            map.put(ug.getUserUuid(), entry);
+        List<UserGame> allGames = userGameRepository.findAll();// Tüm oyunları al
+        Map<UUID, Leaderboard> map = new HashMap<>(); // Kullanıcıya göre liderlik tablosunu tutacak harita
+        for (UserGame ug : allGames) {// Her bir kullanıcı oyunu için
+            Leaderboard entry = map.getOrDefault(ug.getUserUuid(), new Leaderboard());// Kullanıcı için mevcut giriş yoksa yeni oluştur
+            entry.setUserUuid(ug.getUserUuid());// Kullanıcı UUID'sini ayarla
+            entry.setTotalXp(entry.getTotalXp() + (ug.getXpEarned() != null ? ug.getXpEarned() : 0));//     Toplam XP'yi güncelle
+            userRepository.findById(ug.getUserUuid()).ifPresent(user -> entry.setUsername(user.getUsername()));// Kullanıcı adını ayarla
+            map.put(ug.getUserUuid(), entry);// map e ekle
         }
-        return new ArrayList<>(map.values());
+        
+        return map.values().stream()// map in değerlerini al ve don
+                .sorted((a, b) -> Integer.compare(b.getTotalXp(), a.getTotalXp()))// azalan sırala
+                .limit(10)//    max 10 kısı
+                .toList();// liste halınde
     }
 
     public List<Leaderboard> getLeaderboardByGameXp(Long gameId) {
@@ -46,7 +48,11 @@ public class UserGameService {
                 map.put(ug.getUserUuid(), entry);
             }
         }
-        return new ArrayList<>(map.values());
+        // Sıralama ve ilk 10'u döndür
+        return map.values().stream()
+                .sorted((a, b) -> Integer.compare(b.getGameXp(), a.getGameXp()))
+                .limit(10)
+                .toList();
     }
 
     @Autowired

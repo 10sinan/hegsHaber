@@ -24,6 +24,7 @@ public class Game {
     private Integer rewardPoints;// ödül puanı
     private Integer rewardXp;// ödül xp
     private Boolean isActive;// oyun aktif mi
+    private String imageurl; // image url
     private Instant createdAt;
     private Timestamp updatedAt;
     private Timestamp deletedAt;
