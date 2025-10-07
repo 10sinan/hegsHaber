@@ -28,7 +28,8 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // devre dışı değil
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/auth/**", "/news/**", "/friendships/**", "/users/**","/api/**","/tasks/**", "/games/**","/user-games/**")
+                        .requestMatchers("/auth/**", "/news/**", "/friendships/**", "/users/**", "/api/**", "/tasks/**",
+                                "/games/**", "/user-games/**", "/saved-news/**")
                         .permitAll()// Bu endpointlere herkes erisebilir
                         .anyRequest().authenticated());
 

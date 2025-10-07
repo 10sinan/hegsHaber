@@ -34,6 +34,9 @@ public class AuthService {
     @Autowired // JWT olusturma ve dogrulama islemleri
     private JwtUtil jwtUtil;
 
+    @Autowired
+    private UserCoinsService userCoinsService;
+
     // Kullanicı kaydi
     public ResponseEntity<AuthResponse> register(RegisterRequestDTO request) {
         if (userRepository.existsByEmail(request.getEmail())) {
@@ -49,20 +52,26 @@ public class AuthService {
 
         User savedUser = userRepository.save(user);
         UserDto userDto = userMapper.toUserDTO(savedUser);
-        return ResponseEntity.status(201).body(new AuthResponse(userDto, "Kayıt başarılı", null));
+        return ResponseEntity.status(201).body(new AuthResponse(userDto, "Kayıt başarılı", null, null));
     }
 
     // Kullanicı girisi
+
     public ResponseEntity<AuthResponse> login(LoginRequestDTO request) {
         User user = userRepository.findByEmail(request.getEmail());
         if (user == null) {
-            return ResponseEntity.status(404).body(new AuthResponse(null, "kullanıcı yok bulunamadı ", null));
+            return ResponseEntity.status(404).body(new AuthResponse(null, "kullanıcı yok bulunamadı ", null, null));
         }
         if (!passwordEncoder.matches(request.getPassword(), user.getSecurity().getPasswordHash())) {
-            return ResponseEntity.status(401).body(new AuthResponse(null, "Giriş başarısız", null));
+            return ResponseEntity.status(401).body(new AuthResponse(null, "Giriş başarısız", null, null));
         }
         UserDto userDto = userMapper.toUserDTO(user);
-        // Token sadece cookie'ye yazılacak, response body'de dönmeyecek
-        return ResponseEntity.ok(new AuthResponse(userDto, "Giriş başarılı", null));
+        // Kullanıcının coin bakiyesini getir
+        Integer balance = null;
+        var coinsList = userCoinsService.getByUserId(user.getId());// UUID kullanarak getir
+        if (coinsList != null && !coinsList.isEmpty()) {//
+            balance = coinsList.get(0).getBalance();// İlk kaydın bakiyesini al
+        }
+        return ResponseEntity.ok(new AuthResponse(userDto, "Giriş başarılı", null, balance));
     }
 }

@@ -12,4 +12,6 @@ public class AuthResponse {
     private UserDto user;
     private String message;
     private String token;
+    private Integer userCoins;
+
 }
