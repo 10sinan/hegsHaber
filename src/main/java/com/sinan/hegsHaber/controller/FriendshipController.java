@@ -21,7 +21,7 @@ public class FriendshipController {
     private final FriendshipService friendshipService;//
     private final FriendshipMapper friendshipMapper;// DTO-Entity dönüşümleri için
 
-    @PostMapping("/follow")// Takip etme işlemi
+    @PostMapping("/follow") // Takip etme işlemi
     public ResponseEntity<FriendshipDto> follow(@RequestParam UUID followerId, @RequestParam UUID followingId) {
         var response = friendshipService.follow(followerId, followingId);
         if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
@@ -33,7 +33,8 @@ public class FriendshipController {
     @GetMapping("/list/{userId}")
     public ResponseEntity<List<FriendshipDto>> list(@PathVariable UUID userId) {
         var entities = friendshipService.listFollows(userId);// Kullanıcının takip ettiği kişileri listele
-        var dtos = entities.stream().map(friendshipMapper::toDto).toList();// Entity'leri DTO'lara dönüştür
+        var dtos = entities.stream().map(f -> friendshipMapper.toDto(f, userId)).toList();// Entity'leri DTO'lara
+                                                                                          // dönüştür
         return ResponseEntity.status(HttpStatus.OK).body(dtos);// DTO listesini döndür
     }
 

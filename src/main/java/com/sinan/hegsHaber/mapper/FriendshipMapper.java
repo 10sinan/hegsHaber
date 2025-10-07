@@ -13,6 +13,19 @@ public interface FriendshipMapper {
     @Mapping(target = "createdAt", source = "createdAt", qualifiedByName = "instantToString")
     FriendshipDto toDto(Friendship friendship);
 
+    default FriendshipDto toDto(Friendship friendship, java.util.UUID userId) {
+        FriendshipDto dto = new FriendshipDto();
+        if (friendship.getFollower().getId().equals(userId)) {
+            dto.setId(friendship.getFollowing().getId().toString());
+            dto.setUsername(friendship.getFollowing().getUsername());
+        } else {
+            dto.setId(friendship.getFollower().getId().toString());
+            dto.setUsername(friendship.getFollower().getUsername());
+        }
+        dto.setCreatedAt(instantToString(friendship.getCreatedAt()));
+        return dto;
+    }
+
     @Named("instantToString")
     public static String instantToString(java.time.Instant instant) {
         return instant == null ? null : instant.toString();
