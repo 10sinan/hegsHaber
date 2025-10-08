@@ -1,7 +1,8 @@
 package com.sinan.hegsHaber.controller.user;
 
 import com.sinan.hegsHaber.entity.user.UserCoins;
-import com.sinan.hegsHaber.service.UserCoinsService;
+import com.sinan.hegsHaber.service.user.UserCoinsService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

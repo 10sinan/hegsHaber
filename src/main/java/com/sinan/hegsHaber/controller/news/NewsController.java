@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sinan.hegsHaber.dto.NewsDto;
-import com.sinan.hegsHaber.service.NewsService;
+import com.sinan.hegsHaber.service.social.NewsService;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

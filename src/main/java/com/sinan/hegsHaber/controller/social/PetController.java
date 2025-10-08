@@ -1,7 +1,7 @@
 package com.sinan.hegsHaber.controller.social;
 
 import com.sinan.hegsHaber.entity.social.Pet_types;
-import com.sinan.hegsHaber.service.PetService;
+import com.sinan.hegsHaber.service.social.PetService;
 
 import java.util.List;
 

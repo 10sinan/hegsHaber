@@ -1,7 +1,8 @@
 package com.sinan.hegsHaber.controller.news;
 
 import com.sinan.hegsHaber.entity.social.SavedNews;
-import com.sinan.hegsHaber.service.SavedNewsService;
+import com.sinan.hegsHaber.service.social.SavedNewsService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

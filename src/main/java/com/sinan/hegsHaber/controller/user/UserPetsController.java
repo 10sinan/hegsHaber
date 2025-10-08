@@ -1,7 +1,7 @@
 package com.sinan.hegsHaber.controller.user;
 
 import com.sinan.hegsHaber.entity.user.UserPets;
-import com.sinan.hegsHaber.service.UserPetsService;
+import com.sinan.hegsHaber.service.user.UserPetsService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

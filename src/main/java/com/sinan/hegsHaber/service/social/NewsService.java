@@ -1,4 +1,4 @@
-package com.sinan.hegsHaber.service;
+package com.sinan.hegsHaber.service.social;
 
 import java.net.URL;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.sinan.hegsHaber.service;
+package com.sinan.hegsHaber.service.user;
 
 import java.util.List;
 import java.util.UUID;

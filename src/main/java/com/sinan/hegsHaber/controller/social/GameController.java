@@ -1,7 +1,8 @@
 package com.sinan.hegsHaber.controller.social;
 
 import com.sinan.hegsHaber.entity.social.Game;
-import com.sinan.hegsHaber.service.GameService;
+import com.sinan.hegsHaber.service.social.GameService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

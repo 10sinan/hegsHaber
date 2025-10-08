@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.sinan.hegsHaber.dto.auth.UserDto;
-import com.sinan.hegsHaber.service.UserService;
+import com.sinan.hegsHaber.service.user.UserService;
 
 @RestController
 @RequestMapping("/users")

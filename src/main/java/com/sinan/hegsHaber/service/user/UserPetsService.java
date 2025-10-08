@@ -1,4 +1,4 @@
-package com.sinan.hegsHaber.service;
+package com.sinan.hegsHaber.service.user;
 
 import com.sinan.hegsHaber.entity.user.UserPets;
 import com.sinan.hegsHaber.repository.user.UserPetsRepository;

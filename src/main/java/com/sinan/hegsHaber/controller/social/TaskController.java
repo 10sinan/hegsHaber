@@ -1,7 +1,8 @@
 package com.sinan.hegsHaber.controller.social;
 
 import com.sinan.hegsHaber.entity.social.Task;
-import com.sinan.hegsHaber.service.TaskService;
+import com.sinan.hegsHaber.service.social.TaskService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

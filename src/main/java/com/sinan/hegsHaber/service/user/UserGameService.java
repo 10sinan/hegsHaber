@@ -1,4 +1,4 @@
-package com.sinan.hegsHaber.service;
+package com.sinan.hegsHaber.service.user;
 
 import java.util.Map;
 import java.util.HashMap;

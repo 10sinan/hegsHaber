@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import com.sinan.hegsHaber.dto.auth.AuthResponse;
 import com.sinan.hegsHaber.dto.auth.LoginRequestDTO;
 import com.sinan.hegsHaber.dto.auth.RegisterRequestDTO;
-import com.sinan.hegsHaber.service.AuthService;
+import com.sinan.hegsHaber.service.user.AuthService;
 import com.sinan.hegsHaber.util.JwtUtil;
 
 @RestController

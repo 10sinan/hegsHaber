@@ -1,4 +1,4 @@
-package com.sinan.hegsHaber.service;
+package com.sinan.hegsHaber.service.social;
 
 import com.sinan.hegsHaber.entity.social.Task;
 import com.sinan.hegsHaber.repository.social.TaskRepository;

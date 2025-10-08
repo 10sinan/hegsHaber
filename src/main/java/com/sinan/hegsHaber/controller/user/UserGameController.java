@@ -4,7 +4,8 @@ import org.springframework.http.ResponseEntity;
 
 import com.sinan.hegsHaber.dto.relationship.Leaderboard;
 import com.sinan.hegsHaber.entity.user.UserGame;
-import com.sinan.hegsHaber.service.UserGameService;
+import com.sinan.hegsHaber.service.user.UserGameService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,4 @@
-package com.sinan.hegsHaber.service;
+package com.sinan.hegsHaber.service.social;
 
 import com.sinan.hegsHaber.entity.social.SavedNews;
 import com.sinan.hegsHaber.repository.social.SavedNewsRepository;
