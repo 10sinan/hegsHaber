@@ -1,7 +1,8 @@
 package com.sinan.hegsHaber.service;
 
-import com.sinan.hegsHaber.entity.SavedNews;
-import com.sinan.hegsHaber.repository.SavedNewsRepository;
+import com.sinan.hegsHaber.entity.social.SavedNews;
+import com.sinan.hegsHaber.repository.social.SavedNewsRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;

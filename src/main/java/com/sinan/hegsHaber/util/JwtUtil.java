@@ -9,7 +9,7 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.sinan.hegsHaber.entity.User;
+import com.sinan.hegsHaber.entity.user.User;
 
 import javax.crypto.SecretKey;
 import java.util.Date;

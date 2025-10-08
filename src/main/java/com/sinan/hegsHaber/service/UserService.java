@@ -6,10 +6,10 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.sinan.hegsHaber.entity.User;
-import com.sinan.hegsHaber.repository.UserRepository;
-import com.sinan.hegsHaber.dto.UserDto;
+import com.sinan.hegsHaber.dto.auth.UserDto;
+import com.sinan.hegsHaber.entity.user.User;
 import com.sinan.hegsHaber.mapper.UserMapper;
+import com.sinan.hegsHaber.repository.user.UserRepository;
 
 import lombok.Data;
 

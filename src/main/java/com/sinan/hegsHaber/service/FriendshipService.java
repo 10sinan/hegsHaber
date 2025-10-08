@@ -7,10 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.sinan.hegsHaber.entity.Friendship;
-import com.sinan.hegsHaber.entity.User;
-import com.sinan.hegsHaber.repository.FriendshipRepository;
-import com.sinan.hegsHaber.repository.UserRepository;
+
+import com.sinan.hegsHaber.entity.social.Friendship;
+import com.sinan.hegsHaber.entity.user.User;
+import com.sinan.hegsHaber.repository.social.FriendshipRepository;
+import com.sinan.hegsHaber.repository.user.UserRepository;
+
 import lombok.RequiredArgsConstructor;
 
 @Service

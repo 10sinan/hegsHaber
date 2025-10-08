@@ -1,6 +1,5 @@
 package com.sinan.hegsHaber.service;
 
-import com.sinan.hegsHaber.dto.Leaderboard;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.UUID;
@@ -10,9 +9,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.sinan.hegsHaber.entity.UserGame;
-import com.sinan.hegsHaber.repository.UserGameRepository;
-import com.sinan.hegsHaber.repository.UserRepository;
+import com.sinan.hegsHaber.dto.relationship.Leaderboard;
+import com.sinan.hegsHaber.entity.user.UserGame;
+import com.sinan.hegsHaber.repository.user.UserGameRepository;
+import com.sinan.hegsHaber.repository.user.UserRepository;
 
 @Service
 public class UserGameService {

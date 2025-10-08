@@ -29,7 +29,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/auth/**", "/news/**", "/friendships/**", "/users/**", "/api/**", "/tasks/**",
-                                "/games/**", "/user-games/**", "/saved-news/**")
+                                "/games/**", "/user-games/**", "/saved-news/**", "/user-coins/**", "/user-pets/**",
+                                "/pets/**")
                         .permitAll()// Bu endpointlere herkes erisebilir
                         .anyRequest().authenticated());
 

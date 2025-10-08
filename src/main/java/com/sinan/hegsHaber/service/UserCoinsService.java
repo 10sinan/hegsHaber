@@ -1,7 +1,8 @@
 package com.sinan.hegsHaber.service;
 
-import com.sinan.hegsHaber.entity.UserCoins;
-import com.sinan.hegsHaber.repository.UserCoinsRepository;
+import com.sinan.hegsHaber.entity.user.UserCoins;
+import com.sinan.hegsHaber.repository.user.UserCoinsRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;

@@ -1,7 +1,8 @@
 package com.sinan.hegsHaber.mapper;
 
-import com.sinan.hegsHaber.dto.FriendshipDto;
-import com.sinan.hegsHaber.entity.Friendship;
+import com.sinan.hegsHaber.dto.relationship.FriendshipDto;
+import com.sinan.hegsHaber.entity.social.Friendship;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;

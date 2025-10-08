@@ -1,7 +1,8 @@
 package com.sinan.hegsHaber.service;
 
-import com.sinan.hegsHaber.entity.Task;
-import com.sinan.hegsHaber.repository.TaskRepository;
+import com.sinan.hegsHaber.entity.social.Task;
+import com.sinan.hegsHaber.repository.social.TaskRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

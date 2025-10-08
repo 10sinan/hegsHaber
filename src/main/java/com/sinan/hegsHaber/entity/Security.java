@@ -2,6 +2,8 @@ package com.sinan.hegsHaber.entity;
 
 import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sinan.hegsHaber.entity.user.User;
+
 import lombok.Data;
 
 @Entity

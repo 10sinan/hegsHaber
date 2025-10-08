@@ -3,8 +3,8 @@ package com.sinan.hegsHaber.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.sinan.hegsHaber.repository.GameRepository;
-import com.sinan.hegsHaber.entity.Game;
+import com.sinan.hegsHaber.entity.social.Game;
+import com.sinan.hegsHaber.repository.social.GameRepository;
 
 import java.util.List;
 
