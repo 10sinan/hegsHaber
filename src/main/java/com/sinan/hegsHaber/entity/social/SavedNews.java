@@ -3,11 +3,15 @@ package com.sinan.hegsHaber.entity.social;
 import java.time.Instant;
 import java.util.UUID;
 
+import com.sinan.hegsHaber.entity.user.User;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -29,6 +33,11 @@ public class SavedNews {
 
     @Column(name = "user_uuid", nullable = false, updatable = false)
     private UUID userUuid;
+
+    // Relationship to User based on user_uuid; keep userUuid for simpler queries
+    @ManyToOne
+    @JoinColumn(name = "user_uuid", referencedColumnName = "uuid", insertable = false, updatable = false)
+    private User user;
 
     @Column(name = "news_id", nullable = false, updatable = false)
     private Long newsId;

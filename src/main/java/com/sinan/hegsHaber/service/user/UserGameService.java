@@ -9,7 +9,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.sinan.hegsHaber.dto.relationship.Leaderboard;
+import com.sinan.hegsHaber.dto.social.Leaderboard;
 import com.sinan.hegsHaber.entity.user.UserGame;
 import com.sinan.hegsHaber.repository.user.UserGameRepository;
 import com.sinan.hegsHaber.repository.user.UserRepository;

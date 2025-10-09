@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import com.sinan.hegsHaber.entity.Security;
 import com.sinan.hegsHaber.entity.social.Friendship;
+import com.sinan.hegsHaber.entity.social.SavedNews;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -51,6 +52,19 @@ public class User {
     // Beni takip edenler (ben following'im) -> friends.following_uuid
     @OneToMany(mappedBy = "following")
     private List<Friendship> receivedFriendRequests;
+
+    // Reverse relations (optional, for convenience)
+    @OneToMany(mappedBy = "user")
+    private List<UserCoins> coins;
+
+    @OneToMany(mappedBy = "user")
+    private List<UserPets> pets;
+
+    @OneToMany(mappedBy = "user")
+    private List<UserGame> games;
+
+    @OneToMany(mappedBy = "user")
+    private List<SavedNews> savedNews;
 
     @Transient // veritabanında saklama sadece hesapla (gpt)
     public int getFriendCount() {

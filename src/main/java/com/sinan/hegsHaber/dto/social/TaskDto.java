@@ -1,8 +1,6 @@
-package com.sinan.hegsHaber.dto;
+package com.sinan.hegsHaber.dto.social;
 
 import lombok.Data;
-
-// id artık Long tipinde olacak
 
 @Data
 public class TaskDto {

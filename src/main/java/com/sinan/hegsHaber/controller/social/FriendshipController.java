@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.sinan.hegsHaber.dto.relationship.FriendshipDto;
+import com.sinan.hegsHaber.dto.social.FriendshipDto;
 import com.sinan.hegsHaber.mapper.FriendshipMapper;
 import com.sinan.hegsHaber.service.social.FriendshipService;
 

@@ -1,4 +1,4 @@
-package com.sinan.hegsHaber.dto;
+package com.sinan.hegsHaber.dto.social;
 
 import java.util.Date;
 import lombok.Data;

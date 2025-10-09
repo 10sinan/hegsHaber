@@ -1,5 +1,7 @@
 package com.sinan.hegsHaber.controller.user;
 
+import com.sinan.hegsHaber.dto.social.PetDto;
+
 import com.sinan.hegsHaber.entity.user.UserPets;
 import com.sinan.hegsHaber.service.user.UserPetsService;
 
@@ -13,13 +15,14 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/user-pets")
 public class UserPetsController {
+
     @Autowired
     private UserPetsService userPetsService;
 
     @GetMapping("/by-user/{userUuid}") // belirli bir kullanicinin petlerini listeleme
-    public ResponseEntity<List<UserPets>> getPetsByUser(@PathVariable("userUuid") String userUuid) {
-        UUID uuid = UUID.fromString(userUuid);// String'i UUID'ye donustur
-        return ResponseEntity.status(HttpStatus.OK).body(userPetsService.getUserPets(uuid));
+    public ResponseEntity<List<PetDto>> getPetsByUser(@PathVariable UUID userUuid) {
+        List<PetDto> pets = userPetsService.getUserPets(userUuid);
+        return ResponseEntity.status(HttpStatus.OK).body(pets);
     }
 
     @PostMapping("/add") // kullaniciya yeni pet ekleme

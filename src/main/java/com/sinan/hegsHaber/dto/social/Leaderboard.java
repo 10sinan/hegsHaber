@@ -1,4 +1,4 @@
-package com.sinan.hegsHaber.dto.relationship;
+package com.sinan.hegsHaber.dto.social;
 
 import java.util.UUID;
 import lombok.Data;

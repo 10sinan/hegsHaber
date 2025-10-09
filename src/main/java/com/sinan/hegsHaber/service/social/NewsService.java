@@ -12,8 +12,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.SyndFeedInput;
-import com.sinan.hegsHaber.dto.NewsDto;
 import com.rometools.rome.io.XmlReader;
+import com.sinan.hegsHaber.dto.social.NewsDto;
 
 @Service
 public class NewsService {

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sinan.hegsHaber.dto.NewsDto;
+import com.sinan.hegsHaber.dto.social.NewsDto;
 import com.sinan.hegsHaber.service.social.NewsService;
 
 import lombok.AllArgsConstructor;

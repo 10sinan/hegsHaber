@@ -2,7 +2,7 @@ package com.sinan.hegsHaber.controller.user;
 
 import org.springframework.http.ResponseEntity;
 
-import com.sinan.hegsHaber.dto.relationship.Leaderboard;
+import com.sinan.hegsHaber.dto.social.Leaderboard;
 import com.sinan.hegsHaber.entity.user.UserGame;
 import com.sinan.hegsHaber.service.user.UserGameService;
 
