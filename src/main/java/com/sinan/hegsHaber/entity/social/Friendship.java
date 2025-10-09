@@ -25,12 +25,12 @@ public class Friendship {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)// EAGER olursa takip edilen kişinin bilgileri de gelir
     @JoinColumn(name = "follower_uuid", referencedColumnName = "uuid", nullable = false)
-    private User follower;
+    private User follower;// takip eden kişi 
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "following_uuid", referencedColumnName = "uuid", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)// EAGER olursa takip eden kişinin bilgileri de gelir
+    @JoinColumn(name = "following_uuid", referencedColumnName = "uuid", nullable = false)// 
     private User following;
 
     @Column(name = "created_at")

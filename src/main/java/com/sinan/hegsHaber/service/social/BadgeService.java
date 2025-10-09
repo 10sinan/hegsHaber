@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -28,6 +29,10 @@ public class BadgeService {
 
     public void deleteBadge(Long id) {
         badgeRepository.deleteById(id);
+    }
+
+    public List<Badge> getBadgesByUserId(UUID userId) {
+        return badgeRepository.findByUser_Id(userId);
     }
 
 }

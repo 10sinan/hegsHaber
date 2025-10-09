@@ -34,7 +34,6 @@ public class SavedNews {
     @Column(name = "user_uuid", nullable = false, updatable = false)
     private UUID userUuid;
 
-    // Relationship to User based on user_uuid; keep userUuid for simpler queries
     @ManyToOne
     @JoinColumn(name = "user_uuid", referencedColumnName = "uuid", insertable = false, updatable = false)
     private User user;
