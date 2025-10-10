@@ -11,11 +11,21 @@ import org.springframework.stereotype.Service;
 
 import com.sinan.hegsHaber.dto.social.Leaderboard;
 import com.sinan.hegsHaber.entity.user.UserGame;
+import com.sinan.hegsHaber.entity.social.Game;
 import com.sinan.hegsHaber.repository.user.UserGameRepository;
 import com.sinan.hegsHaber.repository.user.UserRepository;
 
 @Service
 public class UserGameService {
+    public void assignGameToUser(UUID userId, Long gameId) {// kullaniciya oyun atama
+        UserGame userGame = new UserGame();
+        userGame.setUserUuid(userId);
+        Game game = new Game();
+        game.setId(gameId);
+        userGame.setGame(game);
+        userGameRepository.save(userGame);
+    }
+
     @Autowired
     private UserRepository userRepository;
 
@@ -23,16 +33,20 @@ public class UserGameService {
         List<UserGame> allGames = userGameRepository.findAll();// Tüm oyunları al
         Map<UUID, Leaderboard> map = new HashMap<>(); // Kullanıcıya göre liderlik tablosunu tutacak harita
         for (UserGame ug : allGames) {// Her bir kullanıcı oyunu için
-            Leaderboard entry = map.getOrDefault(ug.getUserUuid(), new Leaderboard());// Kullanıcı için mevcut giriş yoksa yeni oluştur
+            Leaderboard entry = map.getOrDefault(ug.getUserUuid(), new Leaderboard());// Kullanıcı için mevcut giriş
+                                                                                      // yoksa yeni oluştur
             entry.setUserUuid(ug.getUserUuid());// Kullanıcı UUID'sini ayarla
-            entry.setTotalXp(entry.getTotalXp() + (ug.getXpEarned() != null ? ug.getXpEarned() : 0));//     Toplam XP'yi güncelle
-            userRepository.findById(ug.getUserUuid()).ifPresent(user -> entry.setUsername(user.getUsername()));// Kullanıcı adını ayarla
+            entry.setTotalXp(entry.getTotalXp() + (ug.getXpEarned() != null ? ug.getXpEarned() : 0));// Toplam XP'yi
+                                                                                                     // güncelle
+            userRepository.findById(ug.getUserUuid()).ifPresent(user -> entry.setUsername(user.getUsername()));// Kullanıcı
+                                                                                                               // adını
+                                                                                                               // ayarla
             map.put(ug.getUserUuid(), entry);// map e ekle
         }
-        
+
         return map.values().stream()// map in değerlerini al ve don
                 .sorted((a, b) -> Integer.compare(b.getTotalXp(), a.getTotalXp()))// azalan sırala
-                .limit(10)//    max 10 kısı
+                .limit(10)// max 10 kısı
                 .toList();// liste halınde
     }
 

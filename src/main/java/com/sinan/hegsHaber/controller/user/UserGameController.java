@@ -10,23 +10,40 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 
-
 import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/user-games")// kullanici oyun bilgileri
+@RequestMapping("/user-games") // kullanici oyun bilgileri
 public class UserGameController {
-     @Autowired
+    
+    @PostMapping("/assign")
+    public ResponseEntity<String> assignGameToUser(@RequestParam UUID userId, @RequestParam Long gameId) {
+        userGameService.assignGameToUser(userId, gameId);
+        return ResponseEntity.status(HttpStatus.CREATED).body("created");
+    }
+
+    @Autowired
     private UserGameService userGameService;
+
     // Liderlik tablosu: toplam XP'ye göre
     @GetMapping("/leaderboard")
-    public ResponseEntity<List<Leaderboard>> getLeaderboard(@RequestParam(required = false) Long gameId) {// gameId opsiyonel yanı verilmezse tüm oyunlar için toplam xp göre liderlik tablosu döner
+    public ResponseEntity<List<Leaderboard>> getLeaderboard(@RequestParam(required = false) Long gameId) {// gameId
+                                                                                                          // opsiyonel
+                                                                                                          // yanı
+                                                                                                          // verilmezse
+                                                                                                          // tüm oyunlar
+                                                                                                          // için toplam
+                                                                                                          // xp göre
+                                                                                                          // liderlik
+                                                                                                          // tablosu
+                                                                                                          // döner
         List<Leaderboard> leaderboard;
         if (gameId == null) {
             leaderboard = userGameService.getLeaderboardByTotalXp();// tüm oyunlar için toplam xp göre liderlik tablosu
         } else {
-            leaderboard = userGameService.getLeaderboardByGameXp(gameId);// belirli bir oyun için xp göre liderlik tablosu
+            leaderboard = userGameService.getLeaderboardByGameXp(gameId);// belirli bir oyun için xp göre liderlik
+                                                                         // tablosu
         }
         if (leaderboard.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(leaderboard);// boş liste dönerse 404
@@ -35,7 +52,7 @@ public class UserGameController {
         }
     }
 
-    @GetMapping("/{userUuid}")// belirli bir kullanıcının oyun bilgilerini döner
+    @GetMapping("/{userUuid}") // belirli bir kullanıcının oyun bilgilerini döner
     public ResponseEntity<List<UserGame>> getUserGames(@PathVariable UUID userUuid) {
         List<UserGame> userGames = userGameService.getUserGames(userUuid);
         if (userGames.isEmpty()) {

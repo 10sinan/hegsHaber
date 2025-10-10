@@ -1,5 +1,6 @@
 package com.sinan.hegsHaber.entity.social;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,14 +20,30 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "name")
     private String name;// oyun adı
-    private String description;// acıklsmsa
+    @Column(name = "description")
+    private String description;// açıklama
+
+    @Column(name = "reward_points")
     private Integer rewardPoints;// ödül puanı
+
+    @Column(name = "reward_xp")
     private Integer rewardXp;// ödül xp
+
+    @Column(name = "is_active")
     private Boolean isActive;// oyun aktif mi
-    //private String imageurl; // image url
+    
+    @Column(name = "image_url")
+    private String image_url; // image url
+
+    @Column(name = "created_at")
     private Instant createdAt;
+
+    @Column(name = "updated_at")
     private Timestamp updatedAt;
+    
+    @Column(name = "deleted_at")
     private Timestamp deletedAt;
 
     @PrePersist

@@ -2,7 +2,6 @@ package com.sinan.hegsHaber.controller.user;
 
 import com.sinan.hegsHaber.dto.social.PetDto;
 
-import com.sinan.hegsHaber.entity.user.UserPets;
 import com.sinan.hegsHaber.service.user.UserPetsService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +24,10 @@ public class UserPetsController {
         return ResponseEntity.status(HttpStatus.OK).body(pets);
     }
 
-    @PostMapping("/add") // kullaniciya yeni pet ekleme
-    public ResponseEntity<UserPets> addUserPet(@RequestBody UserPets userPet) {
-        UserPets createdPet = userPetsService.addUserPet(userPet);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdPet);
+    @PostMapping("/assign") // kullaniciya pet atama
+    public ResponseEntity<String> assignPetToUser(@RequestParam UUID userId, @RequestParam Long petId) {
+        userPetsService.assignPetToUser(userId, petId);
+        return ResponseEntity.status(HttpStatus.CREATED).body("created");
     }
 
 }
