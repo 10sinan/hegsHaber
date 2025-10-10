@@ -8,12 +8,15 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sinan.hegsHaber.dto.social.Leaderboard;
 import com.sinan.hegsHaber.entity.user.UserGame;
+import com.sinan.hegsHaber.entity.user.UserXp;
 import com.sinan.hegsHaber.entity.social.Game;
 import com.sinan.hegsHaber.repository.user.UserGameRepository;
 import com.sinan.hegsHaber.repository.user.UserRepository;
+import com.sinan.hegsHaber.repository.user.UserXpRepository;
 
 @Service
 public class UserGameService {
@@ -28,26 +31,30 @@ public class UserGameService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private UserGameRepository userGameRepository;
+
+    @Autowired
+    private UserXpRepository userXpRepository;
 
     public List<Leaderboard> getLeaderboardByTotalXp() {
-        List<UserGame> allGames = userGameRepository.findAll();// Tüm oyunları al
-        Map<UUID, Leaderboard> map = new HashMap<>(); // Kullanıcıya göre liderlik tablosunu tutacak harita
-        for (UserGame ug : allGames) {// Her bir kullanıcı oyunu için
-            Leaderboard entry = map.getOrDefault(ug.getUserUuid(), new Leaderboard());// Kullanıcı için mevcut giriş
-                                                                                      // yoksa yeni oluştur
-            entry.setUserUuid(ug.getUserUuid());// Kullanıcı UUID'sini ayarla
-            entry.setTotalXp(entry.getTotalXp() + (ug.getXpEarned() != null ? ug.getXpEarned() : 0));// Toplam XP'yi
-                                                                                                     // güncelle
-            userRepository.findById(ug.getUserUuid()).ifPresent(user -> entry.setUsername(user.getUsername()));// Kullanıcı
-                                                                                                               // adını
-                                                                                                               // ayarla
-            map.put(ug.getUserUuid(), entry);// map e ekle
+        // Toplam liderlik artık user_xp tablosundaki değerlere göre hesaplanacak
+        List<UserXp> allUserXp = userXpRepository.findAll();
+        Map<UUID, Leaderboard> map = new HashMap<>();
+        for (UserXp ux : allUserXp) {
+            if (ux.getUserUuid() == null)
+                continue;
+            Leaderboard entry = map.getOrDefault(ux.getUserUuid(), new Leaderboard());
+            entry.setUserUuid(ux.getUserUuid());
+            entry.setTotalXp(ux.getXp() != null ? ux.getXp() : 0);
+            userRepository.findById(ux.getUserUuid())
+                    .ifPresent(user -> entry.setUsername(user.getUsername()));
+            map.put(ux.getUserUuid(), entry);
         }
-
-        return map.values().stream()// map in değerlerini al ve don
-                .sorted((a, b) -> Integer.compare(b.getTotalXp(), a.getTotalXp()))// azalan sırala
-                .limit(10)// max 10 kısı
-                .toList();// liste halınde
+        return map.values().stream()
+                .sorted((a, b) -> Integer.compare(b.getTotalXp(), a.getTotalXp()))
+                .limit(10)
+                .toList();
     }
 
     public List<Leaderboard> getLeaderboardByGameXp(Long gameId) {
@@ -69,10 +76,42 @@ public class UserGameService {
                 .toList();
     }
 
-    @Autowired
-    private UserGameRepository userGameRepository;
-
     public List<UserGame> getUserGames(UUID userUuid) {
         return userGameRepository.findByUserUuid(userUuid);
+    }
+
+    @Transactional // tek bir işlem olarak çalıştır
+    public void addXpToUserGame(Long userGameId, int xp) {// belirli bir kullanıcı oyununa xp ekle
+        userGameRepository.findById(userGameId).ifPresent(userGame -> {// kullanıcı oyunu bulunursa
+            int currentXp = userGame.getXpEarned() != null ? userGame.getXpEarned() : 0;
+            userGame.setXpEarned(currentXp + xp);
+            userGameRepository.save(userGame);
+            // Toplam kullanıcı XP'sini de güncelle
+            upsertAndIncrementUserXp(userGame.getUserUuid(), xp);
+        });
+    }
+
+    @Transactional
+    public void addXpToUser(UUID userId, int xp) {
+        // Genel amaçlı: toplam kullanıcı XP'sine doğrudan ekleme
+        upsertAndIncrementUserXp(userId, xp);
+    }
+
+    private void upsertAndIncrementUserXp(UUID userUuid, int delta) {// kullanıcı xp sini güncelle veya ekle
+        UserXp userXp = userXpRepository.findByUserUuid(userUuid).orElseGet(() -> {
+            UserXp ux = new UserXp();
+            ux.setUserUuid(userUuid);
+            ux.setXp(0);
+            return ux;
+        });
+        int current = userXp.getXp() != null ? userXp.getXp() : 0;
+        userXp.setXp(current + delta);
+        userXpRepository.save(userXp);
+    }
+
+    public int getTotalXp(UUID userUuid) {// kullanıcının toplam xp sini döner
+        return userXpRepository.findByUserUuid(userUuid)
+                .map(UserXp::getXp)
+                .orElse(0);
     }
 }

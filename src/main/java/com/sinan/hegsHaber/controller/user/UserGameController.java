@@ -16,8 +16,8 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/user-games") // kullanici oyun bilgileri
 public class UserGameController {
-    
-    @PostMapping("/assign")
+
+    @PostMapping("/assign") // kullaniciya oyun atama
     public ResponseEntity<String> assignGameToUser(@RequestParam UUID userId, @RequestParam Long gameId) {
         userGameService.assignGameToUser(userId, gameId);
         return ResponseEntity.status(HttpStatus.CREATED).body("created");
@@ -28,16 +28,7 @@ public class UserGameController {
 
     // Liderlik tablosu: toplam XP'ye göre
     @GetMapping("/leaderboard")
-    public ResponseEntity<List<Leaderboard>> getLeaderboard(@RequestParam(required = false) Long gameId) {// gameId
-                                                                                                          // opsiyonel
-                                                                                                          // yanı
-                                                                                                          // verilmezse
-                                                                                                          // tüm oyunlar
-                                                                                                          // için toplam
-                                                                                                          // xp göre
-                                                                                                          // liderlik
-                                                                                                          // tablosu
-                                                                                                          // döner
+    public ResponseEntity<List<Leaderboard>> getLeaderboard(@RequestParam(required = false) Long gameId) {
         List<Leaderboard> leaderboard;
         if (gameId == null) {
             leaderboard = userGameService.getLeaderboardByTotalXp();// tüm oyunlar için toplam xp göre liderlik tablosu
@@ -60,5 +51,17 @@ public class UserGameController {
         } else {
             return ResponseEntity.status(HttpStatus.OK).body(userGames);// kullanıcı bulunursa 200
         }
+    }
+
+    @GetMapping("/total-xp/{userUuid}")
+    public ResponseEntity<Integer> getTotalXp(@PathVariable UUID userUuid) {
+        int total = userGameService.getTotalXp(userUuid);
+        return ResponseEntity.status(HttpStatus.OK).body(total);
+    }
+
+    @PostMapping("/add-xp") // belirli bir kullanıcı oyununa xp ekler
+    public ResponseEntity<String> addXpToUserGame(@RequestParam Long userGameId, @RequestParam int xp) {
+        userGameService.addXpToUserGame(userGameId, xp);
+        return ResponseEntity.status(HttpStatus.OK).body("XP eklendi");
     }
 }
