@@ -81,13 +81,12 @@ public class UserGameService {
     }
 
     @Transactional // tek bir işlem olarak çalıştır
-    public void addXpToUserGame(Long userGameId, int xp) {// belirli bir kullanıcı oyununa xp ekle
+    public void addXpToUserGame(Long userGameId, int xp, UUID userUuid) {// belirli bir kullanıcı oyununa xp ekle
         userGameRepository.findById(userGameId).ifPresent(userGame -> {// kullanıcı oyunu bulunursa
             int currentXp = userGame.getXpEarned() != null ? userGame.getXpEarned() : 0;
-            userGame.setXpEarned(currentXp + xp);
-            userGameRepository.save(userGame);
+            userGame.setXpEarned(currentXp + xp);// kullanıcı oyununa xp ekle
             // Toplam kullanıcı XP'sini de güncelle
-            upsertAndIncrementUserXp(userGame.getUserUuid(), xp);
+            userGameRepository.save(userGame);
         });
     }
 
@@ -107,6 +106,21 @@ public class UserGameService {
         int current = userXp.getXp() != null ? userXp.getXp() : 0;
         userXp.setXp(current + delta);
         userXpRepository.save(userXp);
+    }
+
+
+    @Transactional
+    public void addXpToUserGameByUserAndGameId(UUID userId, Long gameId, int xp) {
+        List<UserGame> userGames = userGameRepository.findByUserUuid(userId);
+        UserGame target = userGames.stream()
+                .filter(ug -> ug.getGame() != null && ug.getGame().getId().equals(gameId))
+                .findFirst().orElse(null);
+        if (target != null) {
+            int currentXp = target.getXpEarned() != null ? target.getXpEarned() : 0;
+            target.setXpEarned(currentXp + xp);
+            userGameRepository.save(target);
+            upsertAndIncrementUserXp(userId, xp);
+        }
     }
 
     public int getTotalXp(UUID userUuid) {// kullanıcının toplam xp sini döner

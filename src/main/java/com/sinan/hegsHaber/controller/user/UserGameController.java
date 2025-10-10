@@ -59,9 +59,13 @@ public class UserGameController {
         return ResponseEntity.status(HttpStatus.OK).body(total);
     }
 
-    @PostMapping("/add-xp") // belirli bir kullanıcı oyununa xp ekler
-    public ResponseEntity<String> addXpToUserGame(@RequestParam Long userGameId, @RequestParam int xp) {
-        userGameService.addXpToUserGame(userGameId, xp);
+    /**
+     * userId ve gameId ile xp ekleme endpointi
+     */
+    @PostMapping("/add-xp-by-user-game")
+    public ResponseEntity<String> addXpToUserGameByUserAndGameId(@RequestParam UUID userId, @RequestParam Long gameId,
+            @RequestParam int xp) {
+        userGameService.addXpToUserGameByUserAndGameId(userId, gameId, xp);
         return ResponseEntity.status(HttpStatus.OK).body("XP eklendi");
     }
 }
