@@ -11,7 +11,6 @@ public class Petmapper {
         PetDto petDto = new PetDto();// PetDto nesnesi olustur
         petDto.setId(userPet.getPetId());// evcil hayvan id'sini ayarla
         petDto.setActive(userPet.getIsActive());// evcil hayvanin aktif olup olmadigini ayarla
-        petDto.setCreatedAt(userPet.getCreatedAt());// evcil hayvan sahiplenme tarihini ayarla
         return petDto;
     }
 

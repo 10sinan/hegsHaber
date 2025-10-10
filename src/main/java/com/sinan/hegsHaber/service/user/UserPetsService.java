@@ -22,6 +22,7 @@ public class UserPetsService {
 
     @Autowired
     private UserPetsRepository userPetsRepository;
+    @Autowired
     private Petmapper petmapper;
 
     public List<PetDto> getUserPets(UUID userUuid) {// belirli bir kullanicinin petlerini getir

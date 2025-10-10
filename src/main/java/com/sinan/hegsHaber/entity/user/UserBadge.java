@@ -1,9 +1,10 @@
-package com.sinan.hegsHaber.entity.social;
+package com.sinan.hegsHaber.entity.user;
 
-import com.sinan.hegsHaber.entity.user.User;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.Instant;
+
+import com.sinan.hegsHaber.entity.social.Badge;
 
 @Entity
 @Data

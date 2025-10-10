@@ -12,18 +12,18 @@ public interface UserMapper {
     // MapStruct kullanarak DTO ve Entity dönüşümleri için arayüz
     UserDto toUserDTO(User user);
 
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "deletedAt", ignore = true)
+
     @Mapping(target = "receivedFriendRequests", ignore = true)
     @Mapping(target = "security", ignore = true)
     @Mapping(target = "sentFriendRequests", ignore = true)
+    
     User toUser(UserDto userDTO);
 
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "deletedAt", ignore = true)
+
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "receivedFriendRequests", ignore = true)
     @Mapping(target = "security", ignore = true)
     @Mapping(target = "sentFriendRequests", ignore = true)
+    
     User toUser(RegisterRequestDTO registerRequestDTO);
 }

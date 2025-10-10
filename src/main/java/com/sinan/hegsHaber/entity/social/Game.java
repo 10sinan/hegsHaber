@@ -5,12 +5,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.Data;
 
-import java.sql.Timestamp;
-import java.time.Instant;
+
 
 @Entity
 @Data
@@ -37,21 +35,6 @@ public class Game {
     @Column(name = "image_url")
     private String image_url; // image url
 
-    @Column(name = "created_at")
-    private Instant createdAt;
 
-    @Column(name = "updated_at")
-    private Timestamp updatedAt;
-    
-    @Column(name = "deleted_at")
-    private Timestamp deletedAt;
-
-    @PrePersist
-    // Instant demek anlık zaman
-    public void onCreate() {
-        if (this.createdAt == null) {
-            this.createdAt = Instant.now();
-        }
-    }
 
 }

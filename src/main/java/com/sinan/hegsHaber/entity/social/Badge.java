@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 @Table(name = "badges")
 
-public class Badge {
+public class Badge {// rozet
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

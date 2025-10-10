@@ -30,10 +30,7 @@ public class PetService {
     private PetDto toDto(Pet_types pet) {
         PetDto dto = new PetDto();
         dto.setId(pet.getId());
-        dto.setActive(true); // Pet_types için aktiflik varsayılan true
-        dto.setCreatedAt(pet.getCreatedAt() != null
-                ? pet.getCreatedAt().atZone(java.time.ZoneId.systemDefault()).toLocalDateTime()
-                : null);
+        dto.setId(pet.getId());
         return dto;
     }
 }

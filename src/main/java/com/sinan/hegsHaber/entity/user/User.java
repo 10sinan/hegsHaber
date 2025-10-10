@@ -1,6 +1,5 @@
 package com.sinan.hegsHaber.entity.user;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,7 +15,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import lombok.Data;
@@ -35,12 +33,6 @@ public class User {
 
     @Column(nullable = false, unique = true, length = 255)
     private String email;
-
-    @Column(name = "deleted_at")
-    private Instant deletedAt;
-
-    @Column(name = "created_at")
-    private Instant createdAt;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Security security;// kullanici guvenlik bilgileri
@@ -78,10 +70,4 @@ public class User {
         return total;
     }
 
-    @PrePersist
-    public void prePersist() {
-        if (createdAt == null) {
-            createdAt = Instant.now();
-        }
-    }
 }

@@ -2,7 +2,8 @@ package com.sinan.hegsHaber.entity.user;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import java.time.LocalDateTime;
+
+import java.time.Instant;
 import java.util.UUID;
 
 import com.sinan.hegsHaber.entity.social.Pet_types;
@@ -33,11 +34,18 @@ public class UserPets {
     private Boolean isActive;
 
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 
     @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    private Instant updatedAt;
 
     @Column(name = "deleted_at")
-    private LocalDateTime deletedAt;
+    private Instant deletedAt;
+
+    @PrePersist
+    public void prePersist() {
+        if (createdAt == null) {
+            createdAt = Instant.now();
+        }
+    }
 }

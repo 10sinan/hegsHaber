@@ -2,8 +2,8 @@
 package com.sinan.hegsHaber.service.social;
 
 import com.sinan.hegsHaber.entity.social.Badge;
-import com.sinan.hegsHaber.entity.social.UserBadge;
 import com.sinan.hegsHaber.entity.user.User;
+import com.sinan.hegsHaber.entity.user.UserBadge;
 import com.sinan.hegsHaber.repository.social.BadgeRepository;
 import com.sinan.hegsHaber.repository.social.UserBadgeRepository;
 

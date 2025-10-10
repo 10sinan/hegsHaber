@@ -30,7 +30,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/auth/**", "/news/**", "/friendships/**", "/users/**", "/api/**", "/tasks/**",
                                 "/games/**", "/user-games/**", "/saved-news/**", "/user-coins/**", "/user-pets/**",
-                                "/pets/**", "/badges/**")
+                                "/pets/**", "/badges/**","/plants/**", "/tiles/**")
                         .permitAll()// Bu endpointlere herkes erisebilir
                         .anyRequest().authenticated());
 

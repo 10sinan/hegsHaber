@@ -11,7 +11,6 @@ import org.mapstruct.Named;
 public interface FriendshipMapper {
     @Mapping(target = "id", source = "following.id")
     @Mapping(target = "username", source = "following.username")
-    @Mapping(target = "createdAt", source = "createdAt", qualifiedByName = "instantToString")
     FriendshipDto toDto(Friendship friendship);
 
     default FriendshipDto toDto(Friendship friendship, java.util.UUID userId) {
@@ -23,7 +22,6 @@ public interface FriendshipMapper {
             dto.setId(friendship.getFollower().getId().toString());
             dto.setUsername(friendship.getFollower().getUsername());
         }
-        dto.setCreatedAt(instantToString(friendship.getCreatedAt()));
         return dto;
     }
 
