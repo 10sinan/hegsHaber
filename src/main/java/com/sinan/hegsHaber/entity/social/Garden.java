@@ -14,7 +14,7 @@ public class Garden {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "uuid", nullable = false)
     private User user;
 
 }

@@ -17,10 +17,10 @@ public class UserCoins {
     @Column(name = "user_uuid")
     private UUID userUuid;
 
-    // Relationship to User using user_uuid; keep primitive field for flexibility
     @ManyToOne
-    @JoinColumn(name = "user_uuid", referencedColumnName = "uuid", insertable = false, updatable = false)
+    @JoinColumn(name = "user_uuid", referencedColumnName = "uuid", insertable = false, updatable = false)// user ile iliskilendir
     private User user;
+
     @Column(name = "balance")
     private int balance;
     @Column(name = "created_at")
