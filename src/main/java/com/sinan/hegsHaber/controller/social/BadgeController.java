@@ -45,19 +45,18 @@ public class BadgeController {
         return ResponseEntity.status(HttpStatus.OK).body(dtos);
     }
 
-    @PostMapping("/assign") // var olan badge'i kullanıcıya ata
+    @PostMapping("/assign") // var olan badge'i kullanıcıya ata (user_badges)
     public ResponseEntity<BadgeDto> assignBadgeToUser(@RequestParam Long badgeId, @RequestParam UUID userId) {
         Badge badge = badgeService.getBadgeById(badgeId);
         if (badge == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);// badge bulunamadı
         }
         User user = userRepository.findById(userId).orElse(null);
         if (user == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);// kullanıcı bulunamadı
         }
-        badge.setUser(user);
-        Badge updatedBadge = badgeService.saveBadge(badge);
-        BadgeDto dto = BadgeMapper.toBadgeDto(updatedBadge);
+        badgeService.assignBadgeToUser(user, badge);// kullanıcıya badge ata
+        BadgeDto dto = BadgeMapper.toBadgeDto(badge);
         return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 

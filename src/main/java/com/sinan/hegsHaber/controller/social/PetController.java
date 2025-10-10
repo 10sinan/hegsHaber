@@ -23,7 +23,7 @@ public class PetController {
     }
 
     @GetMapping("/all-pets") // tum petleri listeleme
-    public ResponseEntity<List<PetDto>> getAllPets() {
+    public ResponseEntity<List<Pet_types>> getAllPets() {
         return ResponseEntity.status(HttpStatus.OK).body(petService.getAllPets().getBody());
     }
 }

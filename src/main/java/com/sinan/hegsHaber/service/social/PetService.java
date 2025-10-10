@@ -11,17 +11,15 @@ import com.sinan.hegsHaber.repository.social.PetRepository;
 import com.sinan.hegsHaber.dto.social.PetDto;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class PetService {
     @Autowired
     private PetRepository petRepository;
 
-    public ResponseEntity<List<PetDto>> getAllPets() {
+    public ResponseEntity<List<Pet_types>> getAllPets() {
         List<Pet_types> pets = petRepository.findAll();
-        List<PetDto> petDtos = pets.stream().map(this::toDto).collect(Collectors.toList());
-        return ResponseEntity.status(HttpStatus.OK).body(petDtos);
+        return ResponseEntity.status(HttpStatus.OK).body(pets);
     }
 
     public ResponseEntity<PetDto> addPet(@RequestBody Pet_types pet) {
