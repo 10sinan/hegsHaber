@@ -7,4 +7,5 @@ import java.util.UUID;
 
 public interface BadgeRepository extends JpaRepository<Badge, Long> {
     List<Badge> findByUser_Id(UUID userId);
+    
 }

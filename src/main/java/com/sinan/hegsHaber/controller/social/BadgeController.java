@@ -8,7 +8,13 @@ import java.util.UUID;
 
 import com.sinan.hegsHaber.entity.social.Badge;
 import com.sinan.hegsHaber.service.social.BadgeService;
+import com.sinan.hegsHaber.entity.user.User;
+import com.sinan.hegsHaber.repository.user.UserRepository;
+import com.sinan.hegsHaber.dto.social.BadgeDto;
+import com.sinan.hegsHaber.mapper.BadgeMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/badges")
@@ -16,33 +22,43 @@ import lombok.RequiredArgsConstructor;
 public class BadgeController {
 
     private final BadgeService badgeService;
+    private final UserRepository userRepository;
 
     @PostMapping("/create-badge")
-    public ResponseEntity<Badge> createBadge(@RequestBody Badge badge) {// başarım oluşturma
+    public ResponseEntity<BadgeDto> createBadge(@RequestBody Badge badge) {// başarım oluşturma
         Badge savedBadge = badgeService.saveBadge(badge);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedBadge);
+        BadgeDto dto = BadgeMapper.toBadgeDto(savedBadge);
+        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Badge>> getBadgesByUserId(@PathVariable UUID userId) {
+    @GetMapping("/user/{userId}") // kullanıcıya ait başarımları getirme
+    public ResponseEntity<List<BadgeDto>> getBadgesByUserId(@PathVariable UUID userId) {
         List<Badge> badges = badgeService.getBadgesByUserId(userId);
-        return ResponseEntity.ok(badges);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Badge> getBadge(@PathVariable Long id) {
-        Badge badge = badgeService.getBadgeById(id);
-        if (badge != null) {
-            return ResponseEntity.ok(badge);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        List<BadgeDto> dtos = badges.stream().map(BadgeMapper::toBadgeDto).toList();
+        return ResponseEntity.status(HttpStatus.OK).body(dtos);
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Badge>> getAllBadges() {// tüm başarımları getirme
+    public ResponseEntity<List<BadgeDto>> getAllBadges() {// tüm başarımları getirme
         List<Badge> badges = badgeService.getAllBadges();
-        return ResponseEntity.status(HttpStatus.OK).body(badges);
+        List<BadgeDto> dtos = badges.stream().map(BadgeMapper::toBadgeDto).toList();
+        return ResponseEntity.status(HttpStatus.OK).body(dtos);
+    }
+
+    @PostMapping("/assign") // var olan badge'i kullanıcıya ata
+    public ResponseEntity<BadgeDto> assignBadgeToUser(@RequestParam Long badgeId, @RequestParam UUID userId) {
+        Badge badge = badgeService.getBadgeById(badgeId);
+        if (badge == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        badge.setUser(user);
+        Badge updatedBadge = badgeService.saveBadge(badge);
+        BadgeDto dto = BadgeMapper.toBadgeDto(updatedBadge);
+        return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
 }
