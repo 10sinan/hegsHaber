@@ -38,7 +38,7 @@ Bu servis HEGS mikroservis ekosisteminin ana backend API'sidir ve **HEGS-SETUP**
 
 Tüm HEGS sistemini kurmak ve çalıştırmak için:
 
-1. **HEGS-SETUP** reposuna gidin: [HEGS-SETUP Repository](https://github.com/<organization>/HEGS-SETUP)
+1. **HEGS-SETUP** reposuna gidin: [HEGS-SETUP Repository](https://github.com/HEGS-HABER/HEGS-SETUP)
 2. HEGS-SETUP README'sindeki adımları takip edin
 3. Tüm mikroservisler otomatik olarak başlatılacaktır
 
