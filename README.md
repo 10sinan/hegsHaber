@@ -30,12 +30,19 @@ Projede tipik bir katmanlı mimari izlenir:
 - `user_games`: Kullanıcı ile oyun ilişkisi ve birikimli oyun XP’si. Alanlar: `id`, `user_uuid`, `game_id`, `status`, `xp_earned`, `created_at`.
 - `user_xp`: Kullanıcının tüm oyunlardan kazandığı toplam XP. Alanlar: `id`, `user_uuid` (unique), `xp`, `created_at`, `updated_at`, `deleted_at`.
 
-## Gereksinimler
-- Java 17+
-- Maven 3.8+
-- Bir SQL veritabanı (application.properties ile yapılandırılır)
+## 🚀 Kurulum
 
-Veritabanı yapılandırması `src/main/resources/application.properties` içinde yapılır.
+Bu servis HEGS mikroservis ekosisteminin ana backend API'sidir ve **HEGS-SETUP** reposu üzerinden Docker Compose ile çalıştırılır.
+
+### Kurulum Adımları
+
+Tüm HEGS sistemini kurmak ve çalıştırmak için:
+
+1. **HEGS-SETUP** reposuna gidin: [HEGS-SETUP Repository](https://github.com/<organization>/HEGS-SETUP)
+2. HEGS-SETUP README'sindeki adımları takip edin
+3. Tüm mikroservisler otomatik olarak başlatılacaktır
+
+**Not**: Bu servisi tek başına çalıştırmak için Docker Compose yerine manuel kurulum yapabilirsiniz (Java 17+, Maven 3.8+, PostgreSQL gereklidir).
 
 ## Önemli Uç Noktalar (API)
 Aşağıdaki uç noktalar `user_games` ve `user_xp` akışları için kritiktir.
